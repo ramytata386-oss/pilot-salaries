@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>اعرف قبضك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            margin-top: 40px;
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 6px 24px #000a, 0 1px 0 #ffcc33;
+            background: linear-gradient(90deg, #ffb347, #ffcc33 60%, #fffbe6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background: rgba(255,255,255,0.10);
+            border-radius: 28px;
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffcc33;
+            padding: 40px 32px 32px 32px;
+            margin: 32px 0;
+            width: 98%;
+            max-width: 520px;
+            position: relative;
+        }
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+        .input-label {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #ffcc33;
+            font-weight: bold;
+            text-shadow: 0 2px 8px #0002;
+        }
+        .input-box {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1.5px solid #ffcc33;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+            width: 85%;
+            max-width: 260px;
+            background: #fffbe6;
+            color: #1e3c72;
+            font-weight: bold;
+            box-shadow: 0 2px 8px #0001;
+        }
+        .search-btn {
+            background: linear-gradient(90deg, #ffb347, #ffcc33 80%, #fffbe6 100%);
+            color: #1e3c72;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 32px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 16px #0002;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .search-btn:hover {
+            background: linear-gradient(90deg, #ffcc33, #ffb347 80%, #fffbe6 100%);
+            transform: scale(1.05);
+        }
+        .result-section {
+            margin-top: 22px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .salary-card {
+            background: rgba(255,255,255,0.22);
+            border-radius: 18px;
+            padding: 28px 22px;
+            box-shadow: 0 8px 32px #0003;
+            min-width: 260px;
+            text-align: right;
+            color: #1e3c72;
+            font-size: 1.18rem;
+            font-weight: bold;
+            border: 1.5px solid #ffcc33;
+            animation: fadeIn 0.7s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .salary-row {
+            margin-bottom: 12px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .salary-row:last-child {
+            border-bottom: none;
+        }
+        .not-found {
+            color: #ff4444;
+            font-weight: bold;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .card {
+                padding: 18px 6px;
+                max-width: 98vw;
+            }
+            .header {
+                font-size: 2rem;
+            }
+            .salary-card {
+                padding: 14px 6px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">اعرف قبضك</div>
+    <div class="card">
+        <div class="input-section">
+            <label for="riderId" class="input-label">أدخل Rider ID الخاص بك:</label>
+            <input type="text" id="riderId" class="input-box" placeholder="مثال: 1023">
+            <button onclick="showSalary()" class="search-btn">اعرض القبض</button>
+        </div>
+        <div id="result" class="result-section" style="display:none;"></div>
+    </div>
+    <script>
+        // إعدادات Google Sheets API
+        const SHEET_ID = '1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU'; // ضع هنا ID الشيت
+        const API_KEY = 'AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94'; // مفتاح API الخاص بك
+        const SHEET_NAME = 'Sheet1'; // غيّر اسم الشيت إذا كان مختلفاً
+
+        let salaries = {};
+
+        async function fetchSalaries() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const rows = data.values;
+                // أول صف هو رؤوس الأعمدة
+                const headers = rows[0];
+                salaries = {};
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const id = row[headers.indexOf('Rider ID')];
+                    if (id) {
+                        let details = {};
+                        headers.forEach((header, idx) => {
+                            details[header] = row[idx];
+                        });
+                        salaries[id] = details;
+                    }
+                }
+            } catch (e) {
+                console.error('خطأ في جلب البيانات من Google Sheets:', e);
+            }
+        }
+
+        fetchSalaries();
+
+        function showSalary() {
+            const id = document.getElementById('riderId').value.trim();
+            const resultDiv = document.getElementById('result');
+            if (salaries[id]) {
+                let detailsHtml = '';
+                Object.entries(salaries[id]).forEach(([key, value]) => {
+                    detailsHtml += `<div class='salary-row'><span>${key}:</span> <b>${value}</b></div>`;
+                });
+                resultDiv.innerHTML = `<div class='salary-card'>${detailsHtml}</div>`;
+                resultDiv.style.display = 'block';
+            } else {
+                resultDiv.innerHTML = `<div class='salary-card not-found'>لا يوجد بيانات لهذا Rider ID</div>`;
+                resultDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
