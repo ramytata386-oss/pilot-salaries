@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>اعرف قبضك</title>
+    <title>Speedo - اعرف قبضك</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #232a3a 0%, #101828 100%);
+            background: radial-gradient(circle at 20% 20%, #232a3a 0%, #101828 100%);
             min-height: 100vh;
             margin: 0;
             font-family: 'Cairo', Arial, sans-serif;
@@ -15,61 +15,69 @@
             align-items: center;
             justify-content: center;
         }
-        .main-card {
-            background: rgba(20, 25, 40, 0.97);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            padding: 36px 32px 28px 32px;
-            width: 370px;
+        .container {
+            background: rgba(20, 25, 40, 0.95);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            padding: 32px 24px 16px 24px;
+            width: 400px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .main-card h1 {
-            font-size: 2.1rem;
+        .logo {
+            width: 320px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        h2 {
+            margin: 0 0 8px 0;
+            font-size: 2rem;
             font-weight: bold;
-            margin-bottom: 18px;
-            letter-spacing: 1px;
         }
-        .main-card p {
+        .desc {
+            font-size: 1rem;
             color: #bfc8e2;
-            font-size: 1.08rem;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
         }
-        .input-box {
+        input[type="text"] {
             width: 100%;
-            padding: 13px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             border: 2px solid #5a6b8a;
             background: #232a3a;
             color: #fff;
-            font-size: 1.08rem;
-            margin-bottom: 14px;
+            font-size: 1rem;
+            margin-bottom: 8px;
             outline: none;
             text-align: right;
         }
-        .main-card button {
+        .hint {
+            font-size: 0.85rem;
+            color: #7a869a;
+            margin-bottom: 18px;
+        }
+        button {
             width: 100%;
-            padding: 13px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             background: #5a6b8a;
             color: #fff;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             border: none;
             cursor: pointer;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 12px;
             transition: background 0.2s;
         }
-        .main-card button:hover {
+        button:hover {
             background: #3e4a63;
         }
         .footer {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #bfc8e2;
-            margin-top: 18px;
-            text-align: center;
+            margin-top: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -78,49 +86,21 @@
         .moon {
             font-size: 1.2rem;
             margin-left: 8px;
-            cursor: pointer;
-        }
-        .logo {
-            width: 250px;
-            margin-bottom: 18px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
-    <div class="main-card">
+    <div class="container">
         <img src="c:/Users/Grand PC/Downloads/52a32288-d43d-4330-9032-530b82895ac3.jpeg" alt="Jasson Delivery Logo" class="logo">
-        <h1>اعرف قبضك</h1>
-        <p>أدخل الكود الخاص بك للمتابعة</p>
-        <input type="text" class="input-box" placeholder="ادخل الكود هنا...">
-        <div style="color:#7a869a; font-size:0.95rem; margin-bottom:14px;">
-            اكتب الـ ID أو أي ماهو في الباكينج Talabat Rider أمامك
-        </div>
-        <button>عرض القبض</button>
+        <h2>اعرف قبضك</h2>
+        <div class="desc">أدخل الكود الخاص بك للمتابعة</div>
+        <input type="text" placeholder="ادخل الكود هنا...">
+        <div class="hint">اكتب الـ ID أو أي ماهو في الباكينج Talabat Rider أمامك</div>
+        <button>التالي</button>
         <div class="footer">
-            <span>Best regards, Rami Nassim</span>
+            <span>www.rider.bloify.com إصدار 3.2 من تنفيذ</span>
             <span class="moon">🌙</span>
         </div>
     </div>
-    <script>
-    // تغيير صورة الشعار عند الضغط على أيقونة القمر
-    document.addEventListener('DOMContentLoaded', function() {
-        var moon = document.querySelector('.moon');
-        var logo = document.querySelector('.logo');
-        var originalSrc = logo.src;
-        var altSrc = 'https://i.imgur.com/1Q9Z1Zy.png'; // صورة بديلة
-        var toggled = false;
-        moon.onclick = function() {
-            if (!toggled) {
-                logo.src = altSrc;
-                toggled = true;
-            } else {
-                logo.src = originalSrc;
-                toggled = false;
-            }
-        };
-    });
-    </script>
 </body>
 </html>
