@@ -1,302 +1,240 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>اعرف قبضك</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(120deg, #1e3c72 0%, #2a5298 60%, #ffcc33 100%);
-            min-height: 100vh;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
-        .header {
-            margin-top: 48px;
-            font-size: 3.5rem;
-            font-weight: bold;
-            letter-spacing: 2.5px;
-            text-shadow: 0 10px 40px #000a, 0 2px 0 #ffcc33;
-            background: linear-gradient(90deg, #ffb347 10%, #ffcc33 60%, #fffbe6 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px #ffcc33aa);
-            animation: shine 2.5s infinite linear;
-        }
-        @keyframes shine {
-            0% { filter: drop-shadow(0 0 12px #ffcc33aa); }
-            50% { filter: drop-shadow(0 0 32px #ffcc33cc); }
-            100% { filter: drop-shadow(0 0 12px #ffcc33aa); }
-        }
-        .card {
-            background: rgba(255,255,255,0.18);
-            border-radius: 40px;
-            box-shadow: 0 24px 64px 0 rgba(31, 38, 135, 0.37), 0 0 0 8px #ffcc3340;
-            backdrop-filter: blur(16px);
-            border: 3px solid #ffcc33;
-            padding: 56px 44px 44px 44px;
-            margin: 44px 0;
-            width: 99%;
-            max-width: 600px;
-            position: relative;
-            transition: box-shadow 0.3s;
-        }
-        .card:hover {
-            box-shadow: 0 32px 80px 0 #ffcc3380, 0 0 0 12px #ffcc3340;
-        }
-        .input-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 36px;
-        }
-        .input-label {
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-            color: #ffcc33;
-            font-weight: bold;
-            text-shadow: 0 2px 12px #0002;
-            letter-spacing: 1px;
-        }
-        .input-box {
-            padding: 16px;
-            border-radius: 16px;
-            border: 2.5px solid #ffcc33;
-            font-size: 1.25rem;
-            margin-bottom: 18px;
-            width: 90%;
-            max-width: 320px;
-            background: #fffbe6;
-            color: #1e3c72;
-            font-weight: bold;
-            box-shadow: 0 4px 16px #ffcc3320;
-            transition: border 0.2s, box-shadow 0.2s;
-        }
-        .input-box:focus {
-            border: 3px solid #ffb347;
-            outline: none;
-            box-shadow: 0 0 24px #ffcc3340;
-        }
-        .search-btn {
-            background: linear-gradient(90deg, #ffb347, #ffcc33 80%, #fffbe6 100%);
-            color: #1e3c72;
-            border: none;
-            border-radius: 16px;
-            padding: 16px 44px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 8px 32px #ffcc3320;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-        .search-btn:after {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; right: 0; bottom: 0;
-            background: linear-gradient(120deg, #fffbe6 0%, #ffcc33 100%);
-            opacity: 0.1;
-            z-index: 0;
-        }
-        .search-btn:hover {
-            background: linear-gradient(90deg, #ffcc33, #ffb347 80%, #fffbe6 100%);
-            transform: scale(1.09);
-            box-shadow: 0 12px 40px #ffcc3340;
-        }
-        .result-section {
-            margin-top: 36px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        .salary-card {
-            background: rgba(255,255,255,0.32);
-            border-radius: 28px;
-            padding: 40px 32px;
-            box-shadow: 0 16px 48px #ffcc3320, 0 0 0 4px #ffcc3340;
-            min-width: 320px;
-            text-align: right;
-            color: #1e3c72;
-            font-size: 1.28rem;
-            font-weight: bold;
-            border: 2.5px solid #ffcc33;
-            animation: fadeIn 0.7s;
-            position: relative;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .salary-row {
-            margin-bottom: 18px;
-            padding-bottom: 8px;
-            border-bottom: 1.5px dashed #e0e0e0;
-            font-size: 1.18rem;
-            letter-spacing: 0.5px;
-        }
-        .salary-row:last-child {
-            border-bottom: none;
-        }
-        .not-found {
-            color: #ff4444;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.2rem;
-        }
-        @media (max-width: 600px) {
-            .card {
-                padding: 18px 6px;
-                max-width: 99vw;
-            }
-            .header {
-                font-size: 2.2rem;
-            }
-            .salary-card {
-                padding: 14px 6px;
-                font-size: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اعرف قبضك</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #000000, #111827, #000);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #00b7ff, #38bdf8, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px #00b7ff80;
+      animation: glow 3s infinite alternate;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px #00b7ff; }
+      100% { text-shadow: 0 0 30px #38bdf8; }
+    }
+
+    .container {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      border: 2px solid #38bdf880;
+      box-shadow: 0 0 30px #00b7ff33;
+      padding: 40px 25px;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 30px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    label {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 14px;
+      color: #fff;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 18px;
+      border-radius: 16px;
+      border: 2px solid #00b7ff;
+      font-size: 1.4rem;
+      text-align: center;
+      color: #111;
+      background: #f8fafc;
+      margin-bottom: 16px;
+      transition: 0.3s;
+      box-shadow: 0 0 15px #00b7ff55;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 25px #38bdf888;
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(90deg, #00b7ff, #38bdf8);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #38bdf8aa;
+    }
+
+    #result {
+      margin-top: 25px;
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      font-size: 1.3rem;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .salary-card.not-found {
+      text-align: center;
+      background: rgba(255, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 1.3rem;
+    }
+
+    .net-box {
+      margin-top: 35px;
+      text-align: center;
+    }
+
+    .net-value {
+      background: linear-gradient(90deg, #0077ff, #00b7ff);
+      color: #fff;
+      font-size: 2.7rem;
+      font-weight: 900;
+      border-radius: 20px;
+      padding: 25px 0;
+      box-shadow: 0 0 25px #00b7ffaa;
+    }
+
+    .net-label {
+      margin-top: 12px;
+      color: #b7e3ff;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="header" style="margin-bottom:0; font-family:'Cairo',sans-serif; letter-spacing:2px; font-size:3rem; color:transparent; background:linear-gradient(90deg,#6c2ad2 0%,#9b5cf0 45%,#ffcc33 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 8px 28px rgba(155,92,240,0.18), 0 2px 8px rgba(255,204,51,0.12); filter:drop-shadow(0 0 18px rgba(155,92,240,0.18));">اعرف قبضك</div>
-    <div class="card" style="background:#fff; border-radius:28px; box-shadow:0 4px 24px #0002; border:none; padding:0; max-width:430px; width:99%; margin-top:18px;">
-        Start-Process "C:\Users\Grand PC\Downloads\pilot_salaries.html"        <!-- حقل البحث عن Rider ID -->
-        <div style="padding:18px 18px 8px 18px; text-align:center;">
-            <input id="riderId" class="input-box" type="text" placeholder="أدخل Rider ID..." style="width:62%; max-width:240px; display:inline-block; margin-right:8px;">
-            <button onclick="showSalary()" class="search-btn" style="padding:10px 14px; font-size:1rem; display:inline-block;">عرض</button>
-        </div>
-        <!-- شعار ثابت بسيط (مخفف المسافات البيضاء حول الصورة) -->
-        <div style="background:transparent; border-radius:18px; margin:6px 6px 0 6px; box-shadow:none; padding:8px 0 4px 0; text-align:center; font-family:'Cairo',sans-serif; color:#1e3c72; font-size:1.15rem; border:none;">
-            <div style="display:flex; justify-content:center;">
-                <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
-                    <div id="pilotPhotoWrap" style="width:220px; height:220px; margin:0 auto; border-radius:14px; overflow:hidden; background:transparent; box-shadow:none; display:block; cursor:pointer;">
-                        <img id="pilotPhotoImg" src="pilot_photo.jpg" alt="pilot" style="width:100%; height:100%; object-fit:cover; display:block;">
-                    </div>
-                    <input id="pilotPhotoFile" type="file" accept="image/*" style="display:none">
-                </div>
-            </div>
-        </div>
-        <!-- تبويب تاريخ الأسبوع -->
-        <div style="background:#f7f7fa; border-radius:18px; margin:18px 18px 0 18px; box-shadow:0 1px 8px #b6c7e611; padding:12px 18px; text-align:right; font-family:'Cairo',sans-serif; font-weight:900; color:#1e3c72; font-size:1.08rem; border:1.5px solid #e0e0e0;">
-            <label for="weekDate" style="margin-left:8px; color:#2a5298; font-weight:700;">تاريخ الأسبوع:</label>
-            <input type="text" id="weekDate" placeholder="مثال: 18-8 إلى 24-8" style="padding:7px 12px; border-radius:8px; border:1.5px solid #b6c7e6; font-size:1rem; font-family:'Cairo',sans-serif; font-weight:700; color:#1e3c72; width:160px;">
-        </div>
-        <!-- تفاصيل القبض -->
-        <div id="result" class="result-section" style="display:none; margin-top:0;"></div>
-    </div>
-    <script>
-        // إعدادات Google Sheets API
-        const SHEET_ID = '1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU'; // ضع هنا ID الشيت
-        const API_KEY = 'AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94'; // مفتاح API الخاص بك
-        const SHEET_NAME = 'Sheet1'; // غيّر اسم الشيت إذا كان مختلفاً
+  <h1>اعرف قبضك</h1>
+  <div class="container">
+    <label for="riderId">ادخل Rider ID:</label>
+    <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا" />
+    <button onclick="showSalary()">عرض التفاصيل</button>
+    <div id="result"></div>
+  </div>
 
-        let salaries = {};
+  <script>
+    const sheetId = "1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
+    const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
+    const range = "Sheet1";
+    let salaries = {};
 
-        async function fetchSalaries() {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const rows = data.values;
-                // أول صف هو رؤوس الأعمدة
-                const headers = rows[0];
-                salaries = {};
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i];
-                    const id = row[headers.indexOf('Rider ID')];
-                    if (id) {
-                        let details = {};
-                        headers.forEach((header, idx) => {
-                            details[header] = row[idx];
-                        });
-                        salaries[id] = details;
-                    }
-                }
-            } catch (e) {
-                console.error('خطأ في جلب البيانات من Google Sheets:', e);
-            }
-        }
+    async function fetchData() {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const rows = data.values;
+      const headers = rows[0];
 
-        fetchSalaries();
+      rows.slice(1).forEach(row => {
+        let record = {};
+        headers.forEach((header, i) => (record[header] = row[i]));
+        salaries[record["Rider ID"]] = record;
+      });
+    }
 
-        function showSalary() {
-            const id = document.getElementById('riderId').value.trim();
-            const resultDiv = document.getElementById('result');
-            if (salaries[id]) {
-                // جدول تفاصيل القبض
-                let detailsHtml = '<div style="padding:0 18px 0 18px;">';
-                detailsHtml += '<div style="margin:18px 0 0 0; font-size:1.18rem; font-weight:900; color:#1e3c72;">تفاصيل القبض</div>';
-                detailsHtml += '<table style="width:100%; margin-top:12px; border-collapse:separate; border-spacing:0 8px;">';
-                Object.entries(salaries[id]).forEach(([key, value]) => {
-                    let isNumber = /^-?\d+(\.\d+)?$/.test(value);
-                    let showCurrency = isNumber && key !== 'Rider ID';
-                    detailsHtml += `<tr style='background:#f7f7fa; border-radius:12px; box-shadow:0 1px 8px #b6c7e611;'>
-                        <td style='padding:10px 8px; font-size:1.08rem; color:#1e3c72; font-weight:700; border-radius:12px 0 0 12px;'>${key}</td>
-                        <td style='padding:10px 8px; font-size:1.08rem; text-align:left; color:${isNumber ? '#6c2ad2' : '#1e3c72'}; font-weight:900; border-radius:0 12px 12px 0;'>${value} ${showCurrency ? 'جنيه' : ''}</td>
-                    </tr>`;
-                });
-                detailsHtml += '</table>';
-                // القبض النهائي
-                let total = Object.values(salaries[id]).filter(v => /^-?\d+(\.\d+)?$/.test(v)).pop();
-                if (total) {
-                    detailsHtml += `<div style='margin:28px 0 0 0; text-align:center;'><div style='background:linear-gradient(90deg,#6c2ad2 0%,#4f8cff 100%); color:#fff; font-size:2.6rem; font-weight:900; border-radius:18px; padding:22px 0; box-shadow:0 2px 16px #6c2ad244;'>${total} جنيه</div><div style='margin-top:8px; color:#6c2ad2; font-size:1.15rem; font-weight:700;'>ما تم صرفه لك (الصافي الاجمالي)</div></div>`;
-                }
-                detailsHtml += '</div>';
-                resultDiv.innerHTML = detailsHtml;
-                resultDiv.style.display = 'block';
-            } else {
-                resultDiv.innerHTML = `<div class='salary-card not-found'>لا يوجد بيانات لهذا Rider ID</div>`;
-                resultDiv.style.display = 'block';
-            }
-        }
-        // --- Pilot photo preview & persistence ---
-        (function(){
-            const photoWrap = document.getElementById('pilotPhotoWrap');
-            const fileInput = document.getElementById('pilotPhotoFile');
-            const img = document.getElementById('pilotPhotoImg');
-            const STORAGE_KEY = 'pilot_photo_dataurl_v1';
+    function showSalary() {
+      const id = document.getElementById("riderId").value.trim();
+      const resultDiv = document.getElementById("result");
 
-            function setDefault() {
-                img.src = 'pilot_photo.jpg';
+      if (salaries[id]) {
+        let detailsHtml = '<table>';
+        Object.entries(salaries[id]).forEach(([key, value]) => {
+          if (key !== "Net Salary" && key !== "صافي القبض" && key !== "Rider ID") {
+            let isNumber = /^-?\d+(\.\d+)?$/.test(value);
+
+            // ✅ إزالة "جنيه" من الأوردرات والساعات
+            let showCurrency = isNumber &&
+              key !== "اجمالي عدد الاوردرات من اول الشهر" &&
+              key !== "اجمالي عدد ساعات";
+
+            // ✅ تلوين "تسوية" حسب السالب أو الموجب
+            let color = "#9ae7ff";
+            if (key.includes("تسويه") || key.includes("تسوية")) {
+              if (parseFloat(value) < 0) color = "#00ff88"; // أخضر للسالب
+              else if (parseFloat(value) > 0) color = "#ff4444"; // أحمر للموجب
             }
 
-            // load saved photo
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) img.src = saved;
-            } catch(e){ /* ignore */ }
+            detailsHtml += `
+              <tr>
+                <td>${key}</td>
+                <td style='text-align:left; color:${color}; font-weight:900;'>
+                  ${value} ${showCurrency ? "جنيه" : ""}
+                </td>
+              </tr>`;
+          }
+        });
+        detailsHtml += "</table>";
 
-            // click on wrapper to choose a file
-            photoWrap.addEventListener('click', ()=> fileInput.click());
-            fileInput.addEventListener('change', (ev)=>{
-                const f = ev.target.files && ev.target.files[0];
-                if (!f) return;
-                const reader = new FileReader();
-                reader.onload = function(e){
-                    img.src = e.target.result;
-                    try { localStorage.setItem(STORAGE_KEY, e.target.result); } catch(e){}
-                };
-                reader.readAsDataURL(f);
-            });
-            // double-click the wrapper to clear back to default
-            photoWrap.addEventListener('dblclick', ()=>{
-                setDefault();
-                try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
-            });
-        })();
-    </script>
+        const netValue = salaries[id]["Net Salary"] || salaries[id]["صافي القبض"] || "غير متاح";
+
+        detailsHtml += `
+          <div class="net-box">
+            <div class="net-value">${netValue} جنيه</div>
+            <div class="net-label">صافي القبض الفعلي للطيار</div>
+          </div>`;
+
+        resultDiv.innerHTML = detailsHtml;
+        resultDiv.style.display = "block";
+      } else {
+        resultDiv.innerHTML =
+          "<div class='salary-card not-found'>❌ لا يوجد بيانات لهذا Rider ID</div>";
+        resultDiv.style.display = "block";
+      }
+    }
+
+    fetchData();
+  </script>
 </body>
 </html>
-
-
