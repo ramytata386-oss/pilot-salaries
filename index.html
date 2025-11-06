@@ -1,293 +1,201 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>اعرف قبضك</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>اعرف قبضك</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&display=swap" rel="stylesheet" />
+<style>
+* { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #000000, #0a1427, #000);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-      position: relative;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #000000, #0a1427, #000);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
 
-    /* النصوص الخلفية */
-    .bg-word {
-      position: absolute;
-      top: 40%;
-      font-size: 16rem;
-      font-weight: 900;
-      background: linear-gradient(120deg, #00b7ff, #38bdf8, #8b5cf6, #ec4899, #00b7ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      opacity: 0.12;
-      user-select: none;
-      pointer-events: none;
-      background-size: 300% 300%;
-      animation: gradientFlow 20s infinite linear;
-      text-shadow: 0 0 40px rgba(0, 183, 255, 0.25);
-      white-space: nowrap;
-      filter: blur(3px);
-      z-index: 0;
-    }
+/* النصوص الخلفية */
+.bg-word {
+  position: absolute;
+  top: 40%;
+  font-size: 9rem;
+  font-weight: 900;
+  background: linear-gradient(120deg, #00b7ff, #38bdf8, #8b5cf6, #ec4899, #00b7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.1;
+  user-select: none;
+  pointer-events: none;
+  background-size: 300% 300%;
+  animation: gradientFlow 20s infinite linear, glowPulse 8s ease-in-out infinite;
+  text-shadow: 0 0 40px rgba(0, 183, 255, 0.25);
+  white-space: nowrap;
+  filter: blur(2px);
+  z-index: 0;
+}
 
-    #wordAr {
-      left: 100%;
-      animation: moveLeft 30s linear infinite, gradientFlow 20s infinite linear;
-    }
+#wordAr { left: 100%; animation: moveLeft 30s linear infinite, gradientFlow 20s infinite linear, glowPulse 8s infinite; }
+#wordMta { right: 100%; animation: moveRight 30s linear infinite, gradientFlow 20s infinite linear, glowPulse 8s infinite; }
 
-    #wordMta {
-      right: 100%;
-      animation: moveRight 30s linear infinite, gradientFlow 20s infinite linear;
-    }
+@keyframes moveLeft { 0%{transform:translateX(0);opacity:0.1;}50%{opacity:0.3;}100%{transform:translateX(-200%);opacity:0.1;} }
+@keyframes moveRight { 0%{transform:translateX(0);opacity:0.1;}50%{opacity:0.3;}100%{transform:translateX(200%);opacity:0.1;} }
+@keyframes gradientFlow { 0%{background-position:0% 50%;}100%{background-position:100% 50%;} }
+@keyframes glowPulse { 0%,100%{text-shadow:0 0 40px #00b7ff80;}50%{text-shadow:0 0 80px #8b5cf6aa;} }
 
-    @keyframes moveLeft {
-      0% { transform: translateX(0); opacity: 0.1; }
-      50% { opacity: 0.3; }
-      100% { transform: translateX(-200%); opacity: 0.1; }
-    }
+@media (max-width: 768px) { .bg-word { font-size: 5rem; top: 45%; } }
 
-    @keyframes moveRight {
-      0% { transform: translateX(0); opacity: 0.1; }
-      50% { opacity: 0.3; }
-      100% { transform: translateX(200%); opacity: 0.1; }
-    }
+/* العنوان يظهر ويختفي مع تأثير Glow */
+h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  text-align: center;
+  z-index: 5;
+  letter-spacing: 3px;
+  color: #fff;
+  text-shadow: 0 0 20px #00b7ff,0 0 40px #38bdf8,0 0 60px #8b5cf6;
+  animation: fadeGlow 3s ease-in-out infinite;
+  margin-bottom: 30px;
+  margin-top: 80px;
+}
+@keyframes fadeGlow {
+  0%,100% { opacity: 0.2; text-shadow:0 0 20px #00b7ff,0 0 40px #38bdf8,0 0 60px #8b5cf6; }
+  50% { opacity: 1; text-shadow:0 0 30px #38bdf8,0 0 60px #8b5cf6,0 0 100px #ec4899; }
+}
 
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
+/* المربع */
+.container {
+  position: relative;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 2px solid rgba(0,183,255,0.5);
+  padding: 40px 25px;
+  width: 90%;
+  max-width: 600px;
+  z-index: 10;
+  margin-bottom: 80px;
+  animation: glowBox 6s ease-in-out infinite;
+  box-shadow:0 0 20px rgba(0,183,255,0.4),0 0 40px rgba(56,189,248,0.3),0 0 80px rgba(139,92,246,0.25);
+}
+@keyframes glowBox {
+  0%,100% { box-shadow:0 0 20px rgba(0,183,255,0.4),0 0 40px rgba(56,189,248,0.3),0 0 80px rgba(139,92,246,0.25); }
+  50% { box-shadow:0 0 35px rgba(56,189,248,0.5),0 0 70px rgba(139,92,246,0.4),0 0 110px rgba(236,72,153,0.3); }
+}
 
-    /* ✨ العنوان */
-    h1 {
-      margin-top: 60px;
-      font-size: 4rem;
-      font-weight: 900;
-      text-align: center;
-      position: relative;
-      z-index: 5;
-      letter-spacing: 3px;
-      color: #fff;
-      text-shadow:
-        0 0 20px #00b7ff,
-        0 0 40px #38bdf8,
-        0 0 60px #8b5cf6;
-      animation: titlePulse 8s ease-in-out infinite;
-    }
+label { font-size: 1.3rem; font-weight: 700; display: block; margin-bottom: 14px; color: #fff; text-align: center; }
 
-    @keyframes titlePulse {
-      0%, 100% {
-        text-shadow:
-          0 0 20px #00b7ff,
-          0 0 40px #38bdf8,
-          0 0 60px #8b5cf6;
-      }
-      50% {
-        text-shadow:
-          0 0 25px #38bdf8,
-          0 0 60px #8b5cf6,
-          0 0 90px #ec4899;
-      }
-    }
+input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 2px solid #00b7ff;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #111;
+  background: #f8fafc;
+  margin-bottom: 14px;
+  transition:0.3s;
+}
+input:focus { outline:none; border-color:#38bdf8; box-shadow:0 0 15px #38bdf888; }
 
-    .word {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+/* زر عرض القبض ملون ومتحرك */
+button {
+  width: 100%;
+  background: linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6,#ec4899,#00b7ff);
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:0.3s;
+  background-size: 300% 100%;
+  animation: rainbowBtn 5s linear infinite, glowBtn 3s ease-in-out infinite;
+}
+button:hover { transform: scale(1.04); box-shadow:0 0 25px #38bdf888; }
+@keyframes rainbowBtn { 0%{background-position:0% 50%;}100%{background-position:100% 50%;} }
+@keyframes glowBtn { 0%,100%{box-shadow:0 0 15px #00b7ff88;}50%{box-shadow:0 0 25px #ec489988;} }
 
-    .word.active {
-      opacity: 1;
-    }
+.signature-top { margin-top: 10px; font-size: 0.9rem; color: #d1e9ff; font-weight: 600; font-style: italic; text-align: center; }
 
-    /* المربع */
-    .container {
-      position: relative;
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(15px);
-      border-radius: 30px;
-      border: 2px solid rgba(0,183,255,0.5);
-      box-shadow: 0 0 30px #00b7ff55 inset;
-      padding: 40px 25px;
-      width: 90%;
-      max-width: 600px;
-      margin-top: 180px;
-      animation: boxPulse 8s ease-in-out infinite;
-      overflow: hidden;
-      z-index: 2;
-    }
+#result { margin-top: 25px; display: none; }
+table { width: 100%; border-collapse: separate; border-spacing:0 8px; font-size:1.2rem; }
+td { padding:10px 8px; border-radius:10px; background:rgba(255,255,255,0.08); color:#fff; vertical-align:top; }
+.salary-card.not-found { text-align:center; background:rgba(255,0,0,0.2); padding:20px; border-radius:12px; font-size:1.2rem; }
 
-    @keyframes boxPulse {
-      0%, 100% {
-        box-shadow: 0 0 30px #00b7ff55 inset;
-      }
-      50% {
-        box-shadow: 0 0 60px #8b5cf655 inset;
-      }
-    }
+.net-box { margin-top:30px; text-align:center; }
+.net-value { background: linear-gradient(90deg,#0077ff,#00b7ff,#38bdf8); color:#fff; font-size:2.5rem; font-weight:900; border-radius:20px; padding:20px 0; box-shadow:0 0 20px #00b7ffaa; }
+.net-label { margin-top:10px; color:#b7e3ff; font-size:1.1rem; font-weight:700; }
 
-    label {
-      font-size: 1.3rem;
-      font-weight: 700;
-      display: block;
-      margin-bottom: 14px;
-      color: #fff;
-      text-align: center;
-    }
-
-    input {
-      width: 100%;
-      padding: 16px;
-      border-radius: 14px;
-      border: 2px solid #00b7ff;
-      font-size: 1.2rem;
-      text-align: center;
-      color: #111;
-      background: #f8fafc;
-      margin-bottom: 14px;
-      transition: 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 15px #38bdf888;
-    }
-
-    button {
-      width: 100%;
-      background: linear-gradient(90deg, #00b7ff, #38bdf8, #8b5cf6);
-      color: white;
-      border: none;
-      padding: 14px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-      background-size: 200% 200%;
-      animation: gradientFlow 20s infinite linear;
-    }
-
-    button:hover {
-      transform: scale(1.04);
-      box-shadow: 0 0 20px #38bdf888;
-    }
-
-    .signature-top {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #d1e9ff;
-      font-weight: 600;
-      font-style: italic;
-      text-align: center;
-    }
-
-    #result { margin-top: 25px; display: none; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 1.2rem; }
-    td { padding: 10px 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: #fff; vertical-align: top; }
-    .salary-card.not-found {
-      text-align: center; background: rgba(255, 0, 0, 0.2); padding: 20px; border-radius: 12px; font-size: 1.2rem;
-    }
-
-    .net-box { margin-top: 30px; text-align: center; }
-    .net-value {
-      background: linear-gradient(90deg, #0077ff, #00b7ff, #38bdf8);
-      color: #fff; font-size: 2.5rem; font-weight: 900;
-      border-radius: 20px; padding: 20px 0; box-shadow: 0 0 20px #00b7ffaa;
-    }
-    .net-label { margin-top: 10px; color: #b7e3ff; font-size: 1.1rem; font-weight: 700; }
-  </style>
+</style>
 </head>
 <body>
 
-  <div id="wordAr" class="bg-word">العربي</div>
-  <div id="wordMta" class="bg-word">MTA</div>
+<div id="wordAr" class="bg-word">العربي</div>
+<div id="wordMta" class="bg-word">MTA</div>
 
-  <h1>
-    <span class="word active" id="word1">اعرف</span>
-    <span class="word" id="word2">قبضك</span>
-  </h1>
+<h1>اعرف قبضك</h1>
 
-  <div class="container">
-    <label for="riderId">ادخل Rider ID:</label>
-    <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا" />
-    <button onclick="showSalary()">عرض التفاصيل</button>
-    <div class="signature-top">Best regards, Rami Naseem</div>
-    <div id="result"></div>
-  </div>
+<div class="container">
+  <label for="riderId">ادخل Rider ID:</label>
+  <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا" />
+  <button onclick="showSalary()">عرض القبض</button>
+  <div class="signature-top">Best regards, Rami Naseem</div>
+  <div id="result"></div>
+</div>
 
-  <script>
-    const word1 = document.getElementById('word1');
-    const word2 = document.getElementById('word2');
-    setInterval(() => {
-      word1.classList.toggle('active');
-      word2.classList.toggle('active');
-    }, 2500);
+<script>
+const sheetId="1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
+const apiKey="AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
+const range="Sheet1";
+let salaries={};
 
-    const sheetId = "1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
-    const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
-    const range = "Sheet1";
-    let salaries = {};
+async function fetchData() {
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+  const response=await fetch(url);
+  const data=await response.json();
+  const rows=data.values;
+  const headers=rows[0];
+  rows.slice(1).forEach(row=>{
+    let record={};
+    headers.forEach((header,i)=>record[header]=row[i]);
+    salaries[record["Rider ID"]]=record;
+  });
+}
 
-    async function fetchData() {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      const rows = data.values;
-      const headers = rows[0];
-      rows.slice(1).forEach(row => {
-        let record = {};
-        headers.forEach((header, i) => (record[header] = row[i]));
-        salaries[record["Rider ID"]] = record;
-      });
-    }
-
-    function showSalary() {
-      const id = document.getElementById("riderId").value.trim();
-      const resultDiv = document.getElementById("result");
-
-      if (salaries[id]) {
-        let detailsHtml = '<table>';
-        Object.entries(salaries[id]).forEach(([key, value]) => {
-          if (key !== "Net Salary" && key !== "صافي القبض" && key !== "Rider ID") {
-            let color = key.toLowerCase().includes("عجز") ? "#ff4444" : "#9ae7ff";
-            detailsHtml += `
-              <tr>
-                <td>${key}</td>
-                <td style='text-align:left; color:${color}; font-weight:900;'>${value} ${isNaN(value) ? "" : "جنيه"}</td>
-              </tr>`;
-          }
-        });
-        detailsHtml += "</table>";
-
-        const netValue = salaries[id]["Net Salary"] || salaries[id]["صافي القبض"] || "غير متاح";
-        detailsHtml += `
-          <div class="net-box">
-            <div class="net-value">${netValue} جنيه</div>
-            <div class="net-label">صافي القبض الفعلي للطيار</div>
-          </div>`;
-        resultDiv.innerHTML = detailsHtml;
-        resultDiv.style.display = "block";
-      } else {
-        resultDiv.innerHTML = "<div class='salary-card not-found'>❌ لا يوجد بيانات لهذا Rider ID</div>";
-        resultDiv.style.display = "block";
+function showSalary() {
+  const id=document.getElementById("riderId").value.trim();
+  const resultDiv=document.getElementById("result");
+  if(salaries[id]){
+    let detailsHtml='<table>';
+    Object.entries(salaries[id]).forEach(([key,value])=>{
+      if(key!=="Net Salary" && key!=="صافي القبض" && key!=="Rider ID"){
+        let color=key.toLowerCase().includes("عجز")?"#ff4444":"#9ae7ff";
+        detailsHtml+=`<tr><td>${key}</td><td style='text-align:left;color:${color};font-weight:900;'>${value}${isNaN(value)?"":" جنيه"}</td></tr>`;
       }
-    }
+    });
+    detailsHtml+="</table>";
+    const netValue=salaries[id]["Net Salary"]||salaries[id]["صافي القبض"]||"غير متاح";
+    detailsHtml+=`<div class="net-box"><div class="net-value">${netValue} جنيه</div><div class="net-label">صافي القبض الفعلي للطيار</div></div>`;
+    resultDiv.innerHTML=detailsHtml;
+    resultDiv.style.display="block";
+  } else {
+    resultDiv.innerHTML="<div class='salary-card not-found'>❌ لا يوجد بيانات لهذا Rider ID</div>";
+    resultDiv.style.display="block";
+  }
+}
 
-    fetchData();
-  </script>
+fetchData();
+</script>
+
 </body>
 </html>
