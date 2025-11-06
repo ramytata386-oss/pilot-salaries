@@ -18,138 +18,142 @@ body{
   position:relative;
 }
 
-/* عنوان اعرف قبضك بمؤثرات الحركة */
+/* 🔥 العنوان */
 h1{
-  font-size:3.5rem;
+  font-size:4rem;
   font-weight:900;
   text-align:center;
-  margin:60px 0 40px 0;
+  margin:70px 0 50px 0;
   background: linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6,#ec4899,#00b7ff);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   background-size:300%;
-  animation: titleAnim 6s linear infinite;
-  text-shadow:0 0 15px rgba(56,189,248,0.6);
+  animation: titleAnim 6s linear infinite, neonPulse 2s ease-in-out infinite alternate;
+  text-shadow:0 0 25px rgba(56,189,248,0.9);
 }
 @keyframes titleAnim {
-  0% {background-position:0% 50%; transform:scale(1);}
-  50% {background-position:100% 50%; transform:scale(1.05);}
-  100% {background-position:0% 50%; transform:scale(1);}
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+@keyframes neonPulse {
+  0% {text-shadow:0 0 15px #00b7ff, 0 0 30px #38bdf8, 0 0 45px #8b5cf6;}
+  100% {text-shadow:0 0 40px #ec4899, 0 0 80px #38bdf8, 0 0 120px #00b7ff;}
 }
 
-/* المربع بتأثير توهج قوي */
+/* 💎 المربع الزجاجي */
 .container{
   position:relative;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(15px);
-  border-radius:20px;
-  border:3px solid rgba(0,183,255,0.8);
-  padding:30px 20px;
-  width:90%;
-  max-width:500px;
-  box-shadow:0 0 30px rgba(0,183,255,0.5), inset 0 0 20px rgba(139,92,246,0.2);
-  margin-bottom:100px;
-  animation: glowBoxEpic 5s ease-in-out infinite alternate;
+  background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  backdrop-filter: blur(20px);
+  border-radius:25px;
+  border:2px solid rgba(0,183,255,0.6);
+  padding:50px 30px;
+  width:95%;
+  max-width:600px;
+  box-shadow:
+    0 0 40px rgba(0,183,255,0.4),
+    inset 0 0 25px rgba(139,92,246,0.15),
+    inset 0 0 45px rgba(56,189,248,0.1);
+  margin-bottom:120px;
+  animation: glassGlow 6s ease-in-out infinite alternate;
 }
-@keyframes glowBoxEpic{
-  0%{
-    box-shadow:0 0 20px rgba(0,183,255,0.6),
-               0 0 40px rgba(56,189,248,0.4),
-               inset 0 0 25px rgba(139,92,246,0.3);
-    border-color:#00b7ff;
-  }
-  50%{
-    box-shadow:0 0 35px rgba(139,92,246,0.8),
-               0 0 60px rgba(236,72,153,0.6),
-               inset 0 0 35px rgba(56,189,248,0.4);
-    border-color:#ec4899;
-  }
-  100%{
-    box-shadow:0 0 25px rgba(0,183,255,0.7),
-               0 0 45px rgba(56,189,248,0.5),
-               inset 0 0 25px rgba(139,92,246,0.3);
-    border-color:#38bdf8;
-  }
+@keyframes glassGlow {
+  0% {border-color:#00b7ff; box-shadow:0 0 25px rgba(0,183,255,0.4);}
+  50% {border-color:#ec4899; box-shadow:0 0 45px rgba(236,72,153,0.6);}
+  100% {border-color:#38bdf8; box-shadow:0 0 30px rgba(56,189,248,0.5);}
 }
 
-label{font-size:1.2rem;font-weight:700;text-align:center;display:block;margin-bottom:10px;color:#fff;}
-input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:2px solid #00b7ff;
-  font-size:1rem;
-  text-align:center;
-  color:#111;
-  background:#f8fafc;
-  margin-bottom:12px;
-  transition:0.3s;
+/* ✨ مربع الإدخال */
+.input-box {position: relative; width: 100%;}
+.input-box input{
+  width:100%; padding:16px; border-radius:14px;
+  border:2px solid transparent; font-size:1.2rem; text-align:center;
+  color:#fff; background:rgba(255,255,255,0.08); outline:none; transition:0.4s ease;
 }
-input:focus{outline:none;border-color:#38bdf8;box-shadow:0 0 10px #38bdf888;}
+.input-box input::placeholder{color:#b3e5ff; opacity:0.6;}
+.input-box input:focus{
+  border-image:linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6,#ec4899) 1;
+  box-shadow:0 0 25px rgba(0,183,255,0.6);
+  transform:scale(1.02);
+}
+
+/* 🧿 الزر */
 button{
-  width:100%;
-  padding:12px;
-  font-size:1rem;
-  font-weight:700;
-  border:none;
-  border-radius:10px;
-  color:#fff;
-  background:linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6);
-  cursor:pointer;
-  transition:0.3s;
-  background-size:200% 100%;
-  animation:btnAnim 3s linear infinite;
+  width:100%; padding:16px; font-size:1.2rem; font-weight:800;
+  border:none; border-radius:14px; color:#fff;
+  background:linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6,#ec4899);
+  cursor:pointer; transition:0.3s; background-size:300% 100%;
+  animation:btnAnim 3s linear infinite; box-shadow:0 0 20px rgba(0,183,255,0.3);
 }
-button:hover{transform:scale(1.05);box-shadow:0 0 20px #38bdf888;}
+button:hover{transform:scale(1.07); box-shadow:0 0 35px rgba(56,189,248,0.6),0 0 60px rgba(139,92,246,0.5);}
 @keyframes btnAnim{0%{background-position:0% 50%;}100%{background-position:100% 50%;}}
 
 .signature-top{
-  margin-top:10px;
-  font-size:0.9rem;
-  color:#d1e9ff;
-  font-weight:600;
-  font-style:italic;
-  text-align:center;
+  margin-top:20px; font-size:1rem; color:#d1e9ff; font-weight:600; font-style:italic; text-align:center; opacity:0.9;
 }
-#result{margin-top:20px;display:none;}
-table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:1rem;}
-td{padding:8px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;vertical-align:top;}
-.salary-card.not-found{
-  text-align:center;
-  background:rgba(255,0,0,0.2);
-  padding:15px;
-  border-radius:10px;
-  font-size:1rem;
-}
-.net-box{margin-top:20px;text-align:center;}
+
+/* 💰 النتيجة */
+#result{margin-top:25px;display:none;}
+table{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:1.05rem;}
+td{padding:10px;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;}
+.salary-card.not-found{text-align:center;background:rgba(255,0,0,0.2);padding:15px;border-radius:12px;font-size:1rem;}
+.net-box{margin-top:25px;text-align:center;position:relative;}
 .net-value{
   background:linear-gradient(90deg,#0077ff,#00b7ff,#38bdf8,#8b5cf6,#ec4899);
-  color:#fff;
-  font-size:2rem;
-  font-weight:900;
-  border-radius:15px;
-  padding:15px 0;
-  box-shadow:0 0 20px #00b7ffaa;
-  animation: netGlow 4s linear infinite alternate;
+  color:#fff;font-size:2.2rem;font-weight:900;border-radius:18px;padding:18px 0;
+  box-shadow:0 0 25px #00b7ffaa;animation: netGlow 4s linear infinite alternate;
+  position:relative;overflow:hidden;cursor:pointer;
 }
 @keyframes netGlow{
-  0%{background-position:0% 50%;box-shadow:0 0 15px #00b7ffaa;}
-  50%{background-position:100% 50%;box-shadow:0 0 25px #ec4899aa;}
-  100%{background-position:0% 50%;box-shadow:0 0 15px #38bdf8aa;}
+  0%{background-position:0% 50%;box-shadow:0 0 20px #00b7ffaa;}
+  50%{background-position:100% 50%;box-shadow:0 0 30px #ec4899aa;}
+  100%{background-position:0% 50%;box-shadow:0 0 20px #38bdf8aa;}
 }
-.net-label{margin-top:8px;color:#b7e3ff;font-size:1rem;font-weight:700;}
+.net-label{margin-top:10px;color:#b7e3ff;font-size:1.1rem;font-weight:700;}
 
-/* الكلمات المتحركة تحت المربع */
+/* 💬 البابل الاحترافي */
+.popup {
+  position:absolute;
+  top:-60px;
+  left:50%;
+  transform:translateX(-50%) scale(0.7);
+  background:linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6,#ec4899);
+  color:white;
+  padding:12px 22px;
+  border-radius:50px;
+  font-weight:900;
+  font-size:1.1rem;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 0 20px rgba(0,183,255,0.8);
+  animation: colorFlow 2s linear infinite;
+}
+@keyframes colorFlow {
+  0% {background-position:0% 50%; text-shadow:0 0 10px #00b7ff;}
+  50% {background-position:100% 50%; text-shadow:0 0 25px #ec4899;}
+  100% {background-position:0% 50%; text-shadow:0 0 10px #38bdf8;}
+}
+.show-popup {
+  animation: popupShow 2s ease forwards;
+}
+@keyframes popupShow {
+  0% {opacity:0; transform:translateX(-50%) scale(0.7);}
+  15% {opacity:1; transform:translateX(-50%) scale(1.1);}
+  70% {opacity:1; transform:translateX(-50%) scale(1);}
+  100% {opacity:0; transform:translateX(-50%) scale(0.6);}
+}
+
+/* الكلمات المتحركة */
 .bg-words {
   position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: -50px;
+  margin-top: -40px;
 }
-
 .bg-word {
-  font-size: 3.5rem;
+  font-size: 5rem;
   font-weight: 900;
   margin: 0 30px;
   background: linear-gradient(90deg,#00b7ff,#38bdf8,#8b5cf6,#ec4899);
@@ -163,10 +167,8 @@ td{padding:8px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;ve
   animation-iteration-count: infinite;
   filter: drop-shadow(0 0 10px rgba(0,183,255,0.6));
 }
-
 #wordArB { animation-name: moveLeftGlow; }
 #wordMtaB { animation-name: moveRightGlow; }
-
 @keyframes moveLeftGlow {
   0% { transform: translateX(0) scale(1); opacity: 0.25; }
   50% { transform: translateX(-70px) scale(1.1); opacity: 0.5; }
@@ -185,13 +187,14 @@ td{padding:8px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;ve
 
 <div class="container">
   <label for="riderId">ادخل Rider ID:</label>
-  <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا">
+  <div class="input-box">
+    <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا">
+  </div>
   <button onclick="showSalary()">عرض القبض</button>
   <div class="signature-top">Best regards, Rami Naseem</div>
   <div id="result"></div>
 </div>
 
-<!-- الكلمات المتحركة تحت المربع -->
 <div class="bg-words">
   <div id="wordArB" class="bg-word">العربي</div>
   <div id="wordMtaB" class="bg-word">MTA</div>
@@ -229,9 +232,21 @@ function showSalary(){
     });
     html+='</table>';
     const net=salaries[id]["Net Salary"]||salaries[id]["صافي القبض"]||"غير متاح";
-    html+=`<div class="net-box"><div class="net-value">${net} جنيه</div><div class="net-label">صافي القبض الفعلي للطيار</div></div>`;
+    html+=`
+      <div class="net-box">
+        <div class="net-value" id="netBox">${net} جنيه</div>
+        <div class="popup" id="popup">💰 ده قبضك</div>
+        <div class="net-label">صافي القبض الفعلي للطيار</div>
+      </div>`;
     resultDiv.innerHTML=html;
     resultDiv.style.display="block";
+
+    const netBox=document.getElementById("netBox");
+    const popup=document.getElementById("popup");
+    netBox.addEventListener("mouseenter",()=>{
+      popup.classList.add("show-popup");
+      setTimeout(()=>popup.classList.remove("show-popup"),2000);
+    });
   }else{
     resultDiv.innerHTML='<div class="salary-card not-found">❌ لا يوجد بيانات لهذا Rider ID</div>';
     resultDiv.style.display="block";
@@ -240,6 +255,5 @@ function showSalary(){
 
 fetchData();
 </script>
-
 </body>
 </html>
