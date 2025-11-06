@@ -4,48 +4,199 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>اعرف قبضك</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
     body {
-      margin: 0; padding: 0; min-height: 100vh;
-      background: radial-gradient(circle at top, #000000, #111827, #000);
-      color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #000000, #0a1427, #000);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       overflow-x: hidden;
+      position: relative;
     }
+
+    /* النصوص الخلفية */
+    .bg-word {
+      position: absolute;
+      top: 40%;
+      font-size: 16rem;
+      font-weight: 900;
+      background: linear-gradient(120deg, #00b7ff, #38bdf8, #8b5cf6, #ec4899, #00b7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0.15;
+      user-select: none;
+      pointer-events: none;
+      background-size: 300% 300%;
+      animation: gradientFlow 6s infinite linear;
+      text-shadow: 0 0 60px rgba(0, 183, 255, 0.3);
+      white-space: nowrap;
+      filter: blur(4px);
+      z-index: 0;
+    }
+
+    #wordAr {
+      left: 100%;
+      animation: moveLeft 9s linear infinite, gradientFlow 6s infinite linear;
+    }
+
+    #wordMta {
+      right: 100%;
+      animation: moveRight 9s linear infinite, gradientFlow 6s infinite linear;
+    }
+
+    @keyframes moveLeft {
+      0% { transform: translateX(0); opacity: 0.1; }
+      50% { opacity: 0.35; }
+      100% { transform: translateX(-200%); opacity: 0.1; }
+    }
+
+    @keyframes moveRight {
+      0% { transform: translateX(0); opacity: 0.1; }
+      50% { opacity: 0.35; }
+      100% { transform: translateX(200%); opacity: 0.1; }
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    /* ✨ العنوان */
     h1 {
-      margin-top: 40px; font-size: 3rem; font-weight: bold;
-      background: linear-gradient(90deg, #00b7ff, #38bdf8, #fff);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px #00b7ff80;
-      animation: glow 3s infinite alternate;
+      margin-top: 60px;
+      font-size: 5rem;
+      font-weight: 900;
+      text-align: center;
+      position: relative;
+      z-index: 5;
+      letter-spacing: 3px;
+      color: #fff;
+      text-shadow:
+        0 0 25px #00b7ff,
+        0 0 50px #00b7ff,
+        0 0 80px #38bdf8,
+        0 0 120px #8b5cf6;
+      animation: titlePulse 3s ease-in-out infinite;
     }
-    @keyframes glow { 0% { text-shadow: 0 0 10px #00b7ff; } 100% { text-shadow: 0 0 30px #38bdf8; } }
 
+    @keyframes titlePulse {
+      0%, 100% {
+        text-shadow:
+          0 0 25px #00b7ff,
+          0 0 50px #00b7ff,
+          0 0 80px #38bdf8,
+          0 0 120px #8b5cf6;
+      }
+      50% {
+        text-shadow:
+          0 0 35px #38bdf8,
+          0 0 80px #00b7ff,
+          0 0 120px #8b5cf6,
+          0 0 160px #ec4899;
+      }
+    }
+
+    .word {
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .word.active {
+      opacity: 1;
+    }
+
+    /* المربع */
     .container {
-      background: rgba(255,255,255,0.05); backdrop-filter: blur(15px);
-      border-radius: 25px; border: 2px solid #38bdf880;
-      box-shadow: 0 0 30px #00b7ff33; padding: 40px 25px;
-      width: 90%; max-width: 600px; margin-top: 30px;
-      animation: fadeIn 0.8s ease-in-out;
+      position: relative;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px);
+      border-radius: 30px;
+      border: 2px solid rgba(0,183,255,0.6);
+      box-shadow: 0 0 40px #00b7ff66, 0 0 80px #8b5cf666 inset;
+      padding: 45px 30px;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 200px;
+      animation: boxPulse 3s ease-in-out infinite;
+      overflow: hidden;
+      z-index: 2;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    label { font-size: 1.4rem; font-weight: 700; display: block; margin-bottom: 14px; color: #fff; text-align: center; }
+    @keyframes boxPulse {
+      0%, 100% {
+        box-shadow: 0 0 40px #00b7ff66, 0 0 80px #8b5cf666 inset;
+      }
+      50% {
+        box-shadow: 0 0 80px #38bdf8aa, 0 0 120px #ec4899aa inset;
+      }
+    }
+
+    label {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 14px;
+      color: #fff;
+      text-align: center;
+    }
+
     input {
-      width: 100%; padding: 18px; border-radius: 16px; border: 2px solid #00b7ff;
-      font-size: 1.4rem; text-align: center; color: #111; background: #f8fafc;
-      margin-bottom: 16px; transition: 0.3s; box-shadow: 0 0 15px #00b7ff55;
+      width: 100%;
+      padding: 18px;
+      border-radius: 16px;
+      border: 2px solid #00b7ff;
+      font-size: 1.4rem;
+      text-align: center;
+      color: #111;
+      background: #f8fafc;
+      margin-bottom: 16px;
+      transition: 0.3s;
+      box-shadow: 0 0 20px #00b7ff66;
     }
-    input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 25px #38bdf888; }
+
+    input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 25px #38bdf888;
+    }
+
     button {
-      width: 100%; background: linear-gradient(90deg, #00b7ff, #38bdf8);
-      color: white; border: none; padding: 16px; font-size: 1.3rem; font-weight: bold; border-radius: 14px;
-      cursor: pointer; transition: 0.3s;
+      width: 100%;
+      background: linear-gradient(90deg, #00b7ff, #38bdf8, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+      background-size: 200% 200%;
+      animation: gradientFlow 6s infinite linear;
     }
-    button:hover { transform: scale(1.05); box-shadow: 0 0 15px #38bdf8aa; }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #38bdf8aa;
+    }
+
     .signature-top {
-      margin-top: 12px; font-size: 1rem; color: #d1e9ff; font-weight: 600; font-style: italic; text-align: center;
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #d1e9ff;
+      font-weight: 600;
+      font-style: italic;
+      text-align: center;
     }
 
     #result { margin-top: 25px; display: none; }
@@ -57,14 +208,24 @@
 
     .net-box { margin-top: 35px; text-align: center; }
     .net-value {
-      background: linear-gradient(90deg, #0077ff, #00b7ff); color: #fff; font-size: 2.7rem; font-weight: 900;
+      background: linear-gradient(90deg, #0077ff, #00b7ff, #38bdf8);
+      color: #fff; font-size: 3rem; font-weight: 900;
       border-radius: 20px; padding: 25px 0; box-shadow: 0 0 25px #00b7ffaa;
     }
     .net-label { margin-top: 12px; color: #b7e3ff; font-size: 1.3rem; font-weight: 700; }
   </style>
 </head>
 <body>
-  <h1>اعرف قبضك</h1>
+
+  <div id="wordAr" class="bg-word">العربي</div>
+  <div id="wordMta" class="bg-word">MTA</div>
+
+  <!-- ✨ العنوان -->
+  <h1>
+    <span class="word active" id="word1">اعرف</span>
+    <span class="word" id="word2">قبضك</span>
+  </h1>
+
   <div class="container">
     <label for="riderId">ادخل Rider ID:</label>
     <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا" />
@@ -74,6 +235,15 @@
   </div>
 
   <script>
+    // ✨ تبديل الكلمات
+    const word1 = document.getElementById('word1');
+    const word2 = document.getElementById('word2');
+    setInterval(() => {
+      word1.classList.toggle('active');
+      word2.classList.toggle('active');
+    }, 2000);
+
+    // ✨ Google Sheets
     const sheetId = "1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
     const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
     const range = "Sheet1";
@@ -85,7 +255,6 @@
       const data = await response.json();
       const rows = data.values;
       const headers = rows[0];
-
       rows.slice(1).forEach(row => {
         let record = {};
         headers.forEach((header, i) => (record[header] = row[i]));
@@ -101,27 +270,11 @@
         let detailsHtml = '<table>';
         Object.entries(salaries[id]).forEach(([key, value]) => {
           if (key !== "Net Salary" && key !== "صافي القبض" && key !== "Rider ID") {
-            let isNumber = /^-?\d+(\.\d+)?$/.test(value);
-
-            // ✅ إزالة كلمة "جنيه" تمامًا من "اجمالي عدد ساعات"
-            let showCurrency = isNumber &&
-              key.toLowerCase() !== "اجمالي عدد ساعات" &&
-              key !== "اجمالي عدد الاوردرات من اول الشهر";
-
-            let color = "#9ae7ff";
-            let warningText = "";
-
-            if (key.toLowerCase().includes("عجز") && !key.toLowerCase().includes("قديم")) {
-              color = "#ff4444";
-              warningText = " - سيقوم المسؤول عنك بالمطالبه بهذه المبلغ .. يرجي تسديده في اسرع وقت لتفادي اي اجراءات قانونية";
-            }
-
+            let color = key.toLowerCase().includes("عجز") ? "#ff4444" : "#9ae7ff";
             detailsHtml += `
               <tr>
                 <td>${key}</td>
-                <td style='text-align:left; color:${color}; font-weight:900;'>
-                  ${value}${showCurrency ? " جنيه" : ""}${warningText}
-                </td>
+                <td style='text-align:left; color:${color}; font-weight:900;'>${value} ${isNaN(value) ? "" : "جنيه"}</td>
               </tr>`;
           }
         });
@@ -133,7 +286,6 @@
             <div class="net-value">${netValue} جنيه</div>
             <div class="net-label">صافي القبض الفعلي للطيار</div>
           </div>`;
-
         resultDiv.innerHTML = detailsHtml;
         resultDiv.style.display = "block";
       } else {
