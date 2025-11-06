@@ -20,6 +20,7 @@ body::before{
 }
 @keyframes glow{from{transform:translateY(0);}to{transform:translateY(40px);}}
 
+/* العنوان */
 h1{
   font-size:3.7rem;font-weight:900;text-align:center;margin:60px 0 30px 0;
   background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
@@ -28,6 +29,7 @@ h1{
 }
 @keyframes titleAnim{0%{background-position:0%;}100%{background-position:100%;}}
 
+/* الصندوق */
 .container{
   position:relative;background:rgba(255,255,255,0.05);
   border-radius:40px;border:1px solid rgba(255,255,255,0.15);
@@ -40,6 +42,7 @@ h1{
 }
 .container:hover{box-shadow:0 0 80px rgba(0,183,255,0.5);transform:scale(1.01);}
 
+/* إدخال البيانات */
 .input-box{position:relative;width:100%;margin:25px 0;}
 .input-box input{
   width:100%;padding:18px 14px;border-radius:40px;
@@ -60,6 +63,8 @@ h1{
   top:-10px;font-size:0.8rem;color:#38bdf8;
   background:rgba(0,0,0,0.6);padding:0 8px;border-radius:8px;
 }
+
+/* الأزرار */
 button{
   width:100%;margin-top:20px;padding:15px;font-size:1.2rem;font-weight:800;
   border:none;border-radius:40px;color:#fff;
@@ -68,6 +73,7 @@ button{
 }
 button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
 
+/* علامة النجاح */
 #successMark{
   position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
   font-size:5rem;color:#00ff88;text-shadow:0 0 30px #00ff88;
@@ -84,6 +90,7 @@ button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
   100%{transform:translate(-50%,-50%) scale(0);}
 }
 
+/* صفحة التأكيد */
 #confirmPage{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:radial-gradient(circle at top,#09142a,#000814 80%);
@@ -106,6 +113,7 @@ button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
 .confirm-no{background:#ff4444;box-shadow:0 0 30px #ff4444;}
 .confirm-yes:hover,.confirm-no:hover{transform:scale(1.1);}
 
+/* بيانات القبض */
 .salary-box{
   background:rgba(255,255,255,0.07);
   border:1px solid rgba(255,255,255,0.1);
@@ -118,18 +126,12 @@ button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
 .salary-key{color:#b3e5ff;font-weight:700;}
 .salary-value{font-weight:900;color:#fff;}
 
-/* ✅ تصميم خرافي لمربع الصافي */
+/* الصافي */
 .net-box{
-  margin-top:25px;
-  text-align:center;
+  margin-top:25px;text-align:center;
   background:linear-gradient(135deg,#00b7ff,#8b5cf6,#ec4899);
-  border-radius:30px;
-  padding:22px;
-  font-size:1.9rem;
-  font-weight:900;
-  color:#fff;
-  position:relative;
-  overflow:hidden;
+  border-radius:30px;padding:22px;font-size:1.9rem;font-weight:900;color:#fff;
+  position:relative;overflow:hidden;
   box-shadow:0 0 40px rgba(0,183,255,0.6),inset 0 0 25px rgba(255,255,255,0.1);
   animation:glowPulse 3s infinite ease-in-out;
 }
@@ -138,20 +140,14 @@ button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
   50%{box-shadow:0 0 60px rgba(236,72,153,0.7);}
 }
 .net-box::before{
-  content:"";
-  position:absolute;
-  top:-50%;left:-50%;
-  width:200%;height:200%;
+  content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
   background:conic-gradient(from 0deg,#00b7ff,#8b5cf6,#ec4899,#00b7ff);
-  animation:rotateGradient 6s linear infinite;
-  z-index:0;opacity:0.3;
+  animation:rotateGradient 6s linear infinite;z-index:0;opacity:0.3;
 }
 @keyframes rotateGradient{to{transform:rotate(360deg);}}
-.net-box span{
-  position:relative;z-index:2;
-  text-shadow:0 0 15px rgba(255,255,255,0.9);
-}
+.net-box span{position:relative;z-index:2;text-shadow:0 0 15px rgba(255,255,255,0.9);}
 
+/* الكلمات المتحركة */
 .bg-words{display:flex;justify-content:center;gap:40px;margin-top:-20px;}
 .bg-word{
   font-size:4.5rem;font-weight:900;
@@ -159,6 +155,7 @@ button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   opacity:0.25;animation:float 5s ease-in-out infinite;
 }
+.bg-word:nth-child(2){animation-direction:reverse;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
 </style>
 </head>
@@ -253,6 +250,7 @@ function confirmYes(){
 function showSalary(){
   const id=currentRider;
   const resultDiv=document.getElementById("result");
+  resultDiv.innerHTML=""; // ✅ تفريغ النتيجة قبل العرض الجديد
   let html='';
   Object.entries(salaries[id]).forEach(([key,value])=>{
     if(key!=="Rider ID" && !/net|صافي|القبض/i.test(key)){
