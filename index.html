@@ -30,36 +30,36 @@
       background: linear-gradient(120deg, #00b7ff, #38bdf8, #8b5cf6, #ec4899, #00b7ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      opacity: 0.15;
+      opacity: 0.12;
       user-select: none;
       pointer-events: none;
       background-size: 300% 300%;
-      animation: gradientFlow 6s infinite linear;
-      text-shadow: 0 0 60px rgba(0, 183, 255, 0.3);
+      animation: gradientFlow 20s infinite linear;
+      text-shadow: 0 0 40px rgba(0, 183, 255, 0.25);
       white-space: nowrap;
-      filter: blur(4px);
+      filter: blur(3px);
       z-index: 0;
     }
 
     #wordAr {
       left: 100%;
-      animation: moveLeft 9s linear infinite, gradientFlow 6s infinite linear;
+      animation: moveLeft 30s linear infinite, gradientFlow 20s infinite linear;
     }
 
     #wordMta {
       right: 100%;
-      animation: moveRight 9s linear infinite, gradientFlow 6s infinite linear;
+      animation: moveRight 30s linear infinite, gradientFlow 20s infinite linear;
     }
 
     @keyframes moveLeft {
       0% { transform: translateX(0); opacity: 0.1; }
-      50% { opacity: 0.35; }
+      50% { opacity: 0.3; }
       100% { transform: translateX(-200%); opacity: 0.1; }
     }
 
     @keyframes moveRight {
       0% { transform: translateX(0); opacity: 0.1; }
-      50% { opacity: 0.35; }
+      50% { opacity: 0.3; }
       100% { transform: translateX(200%); opacity: 0.1; }
     }
 
@@ -71,7 +71,7 @@
     /* ✨ العنوان */
     h1 {
       margin-top: 60px;
-      font-size: 5rem;
+      font-size: 4rem;
       font-weight: 900;
       text-align: center;
       position: relative;
@@ -79,33 +79,30 @@
       letter-spacing: 3px;
       color: #fff;
       text-shadow:
-        0 0 25px #00b7ff,
-        0 0 50px #00b7ff,
-        0 0 80px #38bdf8,
-        0 0 120px #8b5cf6;
-      animation: titlePulse 3s ease-in-out infinite;
+        0 0 20px #00b7ff,
+        0 0 40px #38bdf8,
+        0 0 60px #8b5cf6;
+      animation: titlePulse 8s ease-in-out infinite;
     }
 
     @keyframes titlePulse {
       0%, 100% {
         text-shadow:
-          0 0 25px #00b7ff,
-          0 0 50px #00b7ff,
-          0 0 80px #38bdf8,
-          0 0 120px #8b5cf6;
+          0 0 20px #00b7ff,
+          0 0 40px #38bdf8,
+          0 0 60px #8b5cf6;
       }
       50% {
         text-shadow:
-          0 0 35px #38bdf8,
-          0 0 80px #00b7ff,
-          0 0 120px #8b5cf6,
-          0 0 160px #ec4899;
+          0 0 25px #38bdf8,
+          0 0 60px #8b5cf6,
+          0 0 90px #ec4899;
       }
     }
 
     .word {
       opacity: 0;
-      transition: opacity 0.8s ease-in-out;
+      transition: opacity 1s ease-in-out;
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
@@ -118,31 +115,31 @@
     /* المربع */
     .container {
       position: relative;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(18px);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(15px);
       border-radius: 30px;
-      border: 2px solid rgba(0,183,255,0.6);
-      box-shadow: 0 0 40px #00b7ff66, 0 0 80px #8b5cf666 inset;
-      padding: 45px 30px;
+      border: 2px solid rgba(0,183,255,0.5);
+      box-shadow: 0 0 30px #00b7ff55 inset;
+      padding: 40px 25px;
       width: 90%;
       max-width: 600px;
-      margin-top: 200px;
-      animation: boxPulse 3s ease-in-out infinite;
+      margin-top: 180px;
+      animation: boxPulse 8s ease-in-out infinite;
       overflow: hidden;
       z-index: 2;
     }
 
     @keyframes boxPulse {
       0%, 100% {
-        box-shadow: 0 0 40px #00b7ff66, 0 0 80px #8b5cf666 inset;
+        box-shadow: 0 0 30px #00b7ff55 inset;
       }
       50% {
-        box-shadow: 0 0 80px #38bdf8aa, 0 0 120px #ec4899aa inset;
+        box-shadow: 0 0 60px #8b5cf655 inset;
       }
     }
 
     label {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       display: block;
       margin-bottom: 14px;
@@ -152,22 +149,21 @@
 
     input {
       width: 100%;
-      padding: 18px;
-      border-radius: 16px;
+      padding: 16px;
+      border-radius: 14px;
       border: 2px solid #00b7ff;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       text-align: center;
       color: #111;
       background: #f8fafc;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       transition: 0.3s;
-      box-shadow: 0 0 20px #00b7ff66;
     }
 
     input:focus {
       outline: none;
       border-color: #38bdf8;
-      box-shadow: 0 0 25px #38bdf888;
+      box-shadow: 0 0 15px #38bdf888;
     }
 
     button {
@@ -175,24 +171,24 @@
       background: linear-gradient(90deg, #00b7ff, #38bdf8, #8b5cf6);
       color: white;
       border: none;
-      padding: 16px;
-      font-size: 1.3rem;
+      padding: 14px;
+      font-size: 1.2rem;
       font-weight: bold;
-      border-radius: 14px;
+      border-radius: 12px;
       cursor: pointer;
       transition: 0.3s;
       background-size: 200% 200%;
-      animation: gradientFlow 6s infinite linear;
+      animation: gradientFlow 20s infinite linear;
     }
 
     button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #38bdf8aa;
+      transform: scale(1.04);
+      box-shadow: 0 0 20px #38bdf888;
     }
 
     .signature-top {
-      margin-top: 12px;
-      font-size: 1rem;
+      margin-top: 10px;
+      font-size: 0.9rem;
       color: #d1e9ff;
       font-weight: 600;
       font-style: italic;
@@ -200,19 +196,19 @@
     }
 
     #result { margin-top: 25px; display: none; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 1.3rem; }
-    td { padding: 12px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: #fff; vertical-align: top; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 1.2rem; }
+    td { padding: 10px 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: #fff; vertical-align: top; }
     .salary-card.not-found {
-      text-align: center; background: rgba(255, 0, 0, 0.2); padding: 20px; border-radius: 12px; font-size: 1.3rem;
+      text-align: center; background: rgba(255, 0, 0, 0.2); padding: 20px; border-radius: 12px; font-size: 1.2rem;
     }
 
-    .net-box { margin-top: 35px; text-align: center; }
+    .net-box { margin-top: 30px; text-align: center; }
     .net-value {
       background: linear-gradient(90deg, #0077ff, #00b7ff, #38bdf8);
-      color: #fff; font-size: 3rem; font-weight: 900;
-      border-radius: 20px; padding: 25px 0; box-shadow: 0 0 25px #00b7ffaa;
+      color: #fff; font-size: 2.5rem; font-weight: 900;
+      border-radius: 20px; padding: 20px 0; box-shadow: 0 0 20px #00b7ffaa;
     }
-    .net-label { margin-top: 12px; color: #b7e3ff; font-size: 1.3rem; font-weight: 700; }
+    .net-label { margin-top: 10px; color: #b7e3ff; font-size: 1.1rem; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -220,7 +216,6 @@
   <div id="wordAr" class="bg-word">العربي</div>
   <div id="wordMta" class="bg-word">MTA</div>
 
-  <!-- ✨ العنوان -->
   <h1>
     <span class="word active" id="word1">اعرف</span>
     <span class="word" id="word2">قبضك</span>
@@ -235,15 +230,13 @@
   </div>
 
   <script>
-    // ✨ تبديل الكلمات
     const word1 = document.getElementById('word1');
     const word2 = document.getElementById('word2');
     setInterval(() => {
       word1.classList.toggle('active');
       word2.classList.toggle('active');
-    }, 2000);
+    }, 2500);
 
-    // ✨ Google Sheets
     const sheetId = "1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
     const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
     const range = "Sheet1";
