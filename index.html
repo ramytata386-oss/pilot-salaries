@@ -9,159 +9,183 @@
 *{box-sizing:border-box;font-family:'Cairo',sans-serif;margin:0;padding:0;}
 body{
   min-height:100vh;
-  background:#0a1427;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  overflow-x:hidden;
+  background:radial-gradient(circle at top,#09142a,#000814 80%);
+  color:#fff;display:flex;flex-direction:column;align-items:center;
+  overflow-x:hidden;position:relative;
 }
+body::before{
+  content:"";position:absolute;width:400px;height:400px;
+  background:radial-gradient(circle,#00b7ff55,#8b5cf655,#ec489955,transparent);
+  filter:blur(140px);top:10%;left:20%;animation:glow 8s infinite alternate;
+}
+@keyframes glow{from{transform:translateY(0);}to{transform:translateY(40px);}}
 
-/* العنوان */
 h1{
-  font-size:3.5rem;
-  font-weight:900;
-  text-align:center;
-  margin:60px 0 40px 0;
-  background: linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation: titleAnim 4s linear infinite;
+  font-size:3.7rem;font-weight:900;text-align:center;margin:60px 0 30px 0;
+  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:titleAnim 4s linear infinite;
 }
-@keyframes titleAnim {
-  0% {background-position:0%;}
-  100% {background-position:100%;}
-}
+@keyframes titleAnim{0%{background-position:0%;}100%{background-position:100%;}}
 
-/* المربع */
 .container{
-  background: rgba(255,255,255,0.05);
-  border-radius:20px;
-  border:1px solid rgba(0,183,255,0.4);
-  padding:35px 25px;
-  width:90%;
-  max-width:500px;
-  box-shadow:0 0 15px rgba(0,183,255,0.2);
-  margin-bottom:70px;
+  position:relative;background:rgba(255,255,255,0.05);
+  border-radius:40px;border:1px solid rgba(255,255,255,0.15);
+  padding:50px 35px;width:95%;max-width:560px;
+  backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 0 20px rgba(255,255,255,0.15),
+             0 0 60px rgba(0,183,255,0.25),
+             0 0 100px rgba(139,92,246,0.15);
+  overflow:hidden;transition:0.5s;
 }
+.container:hover{box-shadow:0 0 80px rgba(0,183,255,0.5);transform:scale(1.01);}
 
-/* الإدخال */
+.input-box{position:relative;width:100%;margin:25px 0;}
 .input-box input{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:none;
-  font-size:1.1rem;
-  text-align:center;
-  color:#fff;
-  background:rgba(255,255,255,0.08);
-  outline:none;
-  transition:0.3s;
+  width:100%;padding:18px 14px;border-radius:40px;
+  border:2px solid rgba(255,255,255,0.2);
+  font-size:1.1rem;text-align:center;color:#fff;
+  background:rgba(255,255,255,0.05);outline:none;transition:0.4s ease;
 }
 .input-box input:focus{
-  box-shadow:0 0 15px rgba(0,183,255,0.6);
+  border-color:#00b7ff;box-shadow:0 0 30px rgba(0,183,255,0.7);
   transform:scale(1.02);
 }
-
-/* الزر */
+.input-box label{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  color:#b3e5ff;font-size:1.05rem;pointer-events:none;transition:0.3s;
+}
+.input-box input:focus+label,
+.input-box input:not(:placeholder-shown)+label{
+  top:-10px;font-size:0.8rem;color:#38bdf8;
+  background:rgba(0,0,0,0.6);padding:0 8px;border-radius:8px;
+}
 button{
-  width:100%;
-  margin-top:15px;
-  padding:14px;
-  font-size:1.1rem;
-  font-weight:800;
-  border:none;
-  border-radius:12px;
-  color:#fff;
+  width:100%;margin-top:20px;padding:15px;font-size:1.2rem;font-weight:800;
+  border:none;border-radius:40px;color:#fff;
   background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  cursor:pointer;
-  transition:0.3s;
+  cursor:pointer;transition:0.3s;box-shadow:0 0 25px rgba(0,183,255,0.3);
 }
-button:hover{transform:scale(1.05); box-shadow:0 0 20px rgba(56,189,248,0.5);}
+button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
 
-.signature-top{
-  margin-top:20px;
-  font-size:0.9rem;
-  color:#b3e5ff;
+#successMark{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+  font-size:5rem;color:#00ff88;text-shadow:0 0 30px #00ff88;
+  opacity:0;transition:all 0.5s ease;z-index:999;
+}
+#successMark.show{
+  opacity:1;transform:translate(-50%,-50%) scale(1.2);
+  animation:pulse 2s ease forwards;
+}
+@keyframes pulse{
+  0%{transform:translate(-50%,-50%) scale(0);}
+  25%{transform:translate(-50%,-50%) scale(1.2);}
+  50%{transform:translate(-50%,-50%) scale(1);}
+  100%{transform:translate(-50%,-50%) scale(0);}
+}
+
+#confirmPage{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(circle at top,#09142a,#000814 80%);
+  display:none;flex-direction:column;justify-content:center;align-items:center;
+  z-index:1000;
+}
+#confirmPage.show{display:flex;animation:fadeIn 0.5s ease forwards;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+#riderName{
+  font-size:2.2rem;font-weight:900;margin-bottom:40px;text-align:center;
+  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.confirm-buttons{display:flex;gap:40px;}
+.confirm-buttons button{
+  width:140px;padding:15px;font-size:1.2rem;border:none;border-radius:40px;
+  color:#fff;font-weight:800;cursor:pointer;transition:0.3s;
+}
+.confirm-yes{background:#00ff88;box-shadow:0 0 30px #00ff88;}
+.confirm-no{background:#ff4444;box-shadow:0 0 30px #ff4444;}
+.confirm-yes:hover,.confirm-no:hover{transform:scale(1.1);}
+
+.salary-box{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;padding:15px 20px;margin:10px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:1.2rem;box-shadow:inset 0 0 10px rgba(255,255,255,0.05),
+  0 0 15px rgba(0,183,255,0.2);transition:0.3s;
+}
+.salary-box:hover{transform:scale(1.03);box-shadow:0 0 25px rgba(56,189,248,0.4);}
+.salary-key{color:#b3e5ff;font-weight:700;}
+.salary-value{font-weight:900;color:#fff;}
+
+/* ✅ تصميم خرافي لمربع الصافي */
+.net-box{
+  margin-top:25px;
   text-align:center;
-  opacity:0.8;
-}
-
-/* النتيجة */
-#result{margin-top:25px;display:none;}
-table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:1rem;}
-td{padding:8px;border-radius:8px;background:rgba(255,255,255,0.07);}
-.salary-card.not-found{text-align:center;background:rgba(255,0,0,0.2);padding:12px;border-radius:10px;font-size:1rem;}
-.net-box{margin-top:20px;text-align:center;position:relative;}
-.net-value{
-  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
+  background:linear-gradient(135deg,#00b7ff,#8b5cf6,#ec4899);
+  border-radius:30px;
+  padding:22px;
+  font-size:1.9rem;
+  font-weight:900;
   color:#fff;
-  font-size:2rem;
-  font-weight:900;
-  border-radius:14px;
-  padding:16px 0;
-  box-shadow:0 0 20px #00b7ff66;
-  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 0 40px rgba(0,183,255,0.6),inset 0 0 25px rgba(255,255,255,0.1);
+  animation:glowPulse 3s infinite ease-in-out;
 }
-
-/* البابل */
-.popup {
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 40px rgba(0,183,255,0.6);}
+  50%{box-shadow:0 0 60px rgba(236,72,153,0.7);}
+}
+.net-box::before{
+  content:"";
   position:absolute;
-  top:-50px;
-  left:50%;
-  transform:translateX(-50%) scale(0.7);
-  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  color:white;
-  padding:10px 20px;
-  border-radius:50px;
-  font-weight:900;
-  font-size:1rem;
-  opacity:0;
-  pointer-events:none;
-  box-shadow:0 0 15px rgba(0,183,255,0.6);
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg,#00b7ff,#8b5cf6,#ec4899,#00b7ff);
+  animation:rotateGradient 6s linear infinite;
+  z-index:0;opacity:0.3;
 }
-.show-popup {animation: popupShow 2s ease forwards;}
-@keyframes popupShow {
-  0% {opacity:0; transform:translateX(-50%) scale(0.7);}
-  20% {opacity:1; transform:translateX(-50%) scale(1.1);}
-  80% {opacity:1; transform:translateX(-50%) scale(1);}
-  100% {opacity:0; transform:translateX(-50%) scale(0.6);}
+@keyframes rotateGradient{to{transform:rotate(360deg);}}
+.net-box span{
+  position:relative;z-index:2;
+  text-shadow:0 0 15px rgba(255,255,255,0.9);
 }
 
-/* الكلمات */
-.bg-words {
-  display:flex;
-  justify-content:center;
-  gap:40px;
-  margin-top:-30px;
+.bg-words{display:flex;justify-content:center;gap:40px;margin-top:-20px;}
+.bg-word{
+  font-size:4.5rem;font-weight:900;
+  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  opacity:0.25;animation:float 5s ease-in-out infinite;
 }
-.bg-word {
-  font-size:4rem;
-  font-weight:900;
-  background: linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity:0.25;
-  animation: float 5s ease-in-out infinite;
-}
-@keyframes float {
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-15px);}
-}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
 </style>
 </head>
 <body>
 
 <h1>اعرف قبضك</h1>
-
-<div class="container">
-  <label for="riderId">ادخل Rider ID:</label>
+<div class="container" id="mainPage">
   <div class="input-box">
-    <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا">
+    <input type="text" id="riderId" placeholder=" " required>
+    <label for="riderId">ادخل Rider ID</label>
   </div>
-  <button onclick="showSalary()">عرض القبض</button>
-  <div class="signature-top">Best regards, Rami Naseem</div>
+  <div class="input-box">
+    <input type="password" id="password" placeholder=" " required>
+    <label for="password">ادخل الباسورد</label>
+  </div>
+  <button onclick="checkLogin()">عرض القبض</button>
   <div id="result"></div>
+</div>
+
+<div id="successMark">✔️</div>
+
+<div id="confirmPage">
+  <div id="riderName"></div>
+  <div class="confirm-buttons">
+    <button class="confirm-yes" onclick="confirmYes()">تأكيد</button>
+    <button class="confirm-no" onclick="confirmNo()">لا</button>
+  </div>
 </div>
 
 <div class="bg-words">
@@ -174,6 +198,7 @@ const sheetId="1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
 const apiKey="AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
 const range="Sheet1";
 let salaries={};
+let currentRider=null;
 
 async function fetchData(){
   const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
@@ -188,42 +213,64 @@ async function fetchData(){
   });
 }
 
-function showSalary(){
+function checkLogin(){
+  const password=document.getElementById("password").value.trim();
   const id=document.getElementById("riderId").value.trim();
-  const resultDiv=document.getElementById("result");
-  if(salaries[id]){
-    let html='<table>';
-    Object.entries(salaries[id]).forEach(([key,value])=>{
-      if(key!=="Net Salary" && key!=="صافي القبض" && key!=="Rider ID"){
-        let color=key.toLowerCase().includes("عجز")?"#ff6666":"#b3e5ff";
-        html+=`<tr><td>${key}</td><td style="text-align:left;color:${color};font-weight:900;">${value}${isNaN(value)?"":" جنيه"}</td></tr>`;
-      }
-    });
-    html+='</table>';
-    const net=salaries[id]["Net Salary"]||salaries[id]["صافي القبض"]||"غير متاح";
-    html+=`
-      <div class="net-box">
-        <div class="net-value" id="netBox">${net} جنيه</div>
-        <div class="popup" id="popup">💰 ده قبضك</div>
-        <div class="net-label">صافي القبض الفعلي للطيار</div>
-      </div>`;
-    resultDiv.innerHTML=html;
-    resultDiv.style.display="block";
-
-    const netBox=document.getElementById("netBox");
-    const popup=document.getElementById("popup");
-    netBox.addEventListener("mouseenter",()=>{
-      popup.classList.add("show-popup");
-      setTimeout(()=>popup.classList.remove("show-popup"),2000);
-    });
-  }else{
-    resultDiv.innerHTML='<div class="salary-card not-found">❌ لا يوجد بيانات لهذا Rider ID</div>';
-    resultDiv.style.display="block";
+  const successMark=document.getElementById("successMark");
+  if(password==="MTA" && salaries[id]){
+    currentRider=id;
+    successMark.classList.add("show");
+    setTimeout(()=>{
+      successMark.classList.remove("show");
+      showConfirmPage();
+    },2000);
+  } else {
+    const resultDiv=document.getElementById("result");
+    resultDiv.innerHTML='<div style="text-align:center;background:rgba(255,0,0,0.2);padding:15px;border-radius:14px;font-size:1rem;">❌ بيانات غير صحيحة</div>';
   }
+}
+
+function showConfirmPage(){
+  const main=document.getElementById("mainPage");
+  const confirm=document.getElementById("confirmPage");
+  const name=document.getElementById("riderName");
+  const record=salaries[currentRider];
+  name.textContent = record["Rider Name"] || record["الاسم"] || "غير معروف";
+  main.style.display="none";
+  confirm.classList.add("show");
+}
+
+function confirmNo(){
+  document.getElementById("confirmPage").classList.remove("show");
+  document.getElementById("mainPage").style.display="block";
+}
+
+function confirmYes(){
+  document.getElementById("confirmPage").classList.remove("show");
+  showSalary();
+}
+
+function showSalary(){
+  const id=currentRider;
+  const resultDiv=document.getElementById("result");
+  let html='';
+  Object.entries(salaries[id]).forEach(([key,value])=>{
+    if(key!=="Rider ID" && !/net|صافي|القبض/i.test(key)){
+      let color=key.toLowerCase().includes("عجز")?"#ff6666":"#fff";
+      html+= `<div class="salary-box">
+                <div class="salary-key">${key}</div>
+                <div class="salary-value" style="color:${color};">${value}${isNaN(value)?"":" جنيه"}</div>
+              </div>`;
+    }
+  });
+  const netKey = Object.keys(salaries[id]).find(k => /net|صافي|القبض/i.test(k));
+  const net = netKey && salaries[id][netKey] ? salaries[id][netKey] : "غير متاح";
+  html+= `<div class="net-box"><span>💰 القبض الصافي: ${net} جنيه</span></div>`;
+  resultDiv.innerHTML=html;
+  document.getElementById("mainPage").style.display="block";
 }
 
 fetchData();
 </script>
-
 </body>
 </html>
