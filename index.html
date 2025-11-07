@@ -4,164 +4,383 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اعرف قبضك</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@800&display=swap" rel="stylesheet">
+<!-- خط كايرو لدعم العربية -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<!-- مكتبة Three.js للخلفية ثلاثية الأبعاد -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
+/* متغيرات الألوان الأصلية (الأزرق، البنفسجي، الوردي) */
+:root {
+  --color-dark-bg: #00050f; /* خلفية داكنة جداً */
+  --color-primary: #00b7ff; /* أزرق سماوي نيون */
+  --color-secondary: #8b5cf6; /* بنفسجي نيون */
+  --color-accent: #ec4899; /* وردي نيون */
+  --color-success: #00ff88; /* أخضر نيون */
+  --color-error: #ff4444; /* أحمر نيون */
+  --color-text-light: #fff;
+
+  /* لوحات الألوان لمربعات القبض */
+  --color-box-1: #00b7ff; 
+  --color-box-2: #8b5cf6;
+  --color-box-3: #10b981; 
+  --color-box-4: #ff9800; 
+  --color-box-5: #ec4899; 
+}
 *{box-sizing:border-box;font-family:'Cairo',sans-serif;margin:0;padding:0;}
+
+/* إعداد الـ 3D والخلفية الرئيسية */
 body{
   min-height:100vh;
-  background:radial-gradient(circle at top,#09142a,#000814 80%);
-  color:#fff;display:flex;flex-direction:column;align-items:center;
-  overflow-x:hidden;position:relative;
+  background:var(--color-dark-bg);
+  color:var(--color-text-light);
+  display:flex;flex-direction:column;align-items:center;
+  overflow-x:hidden;
+  position:relative;
 }
-body::before{
-  content:"";position:absolute;width:400px;height:400px;
-  background:radial-gradient(circle,#00b7ff55,#8b5cf655,#ec489955,transparent);
-  filter:blur(140px);top:10%;left:20%;animation:glow 8s infinite alternate;
-}
-@keyframes glow{from{transform:translateY(0);}to{transform:translateY(40px);}}
 
-/* العنوان */
+/* الخلفية ثلاثية الأبعاد (Canvas) */
+#threeCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; 
+  opacity: 0.3; 
+}
+
+/* العنوان الرئيسي (H1) */
 h1{
-  font-size:3.7rem;font-weight:900;text-align:center;margin:60px 0 30px 0;
-  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  animation:titleAnim 4s linear infinite;
+  font-size:3.7rem;font-weight:900;text-align:center;
+  margin:30px 0 10px 0;
+  line-height: 1.1; 
 }
-@keyframes titleAnim{0%{background-position:0%;}100%{background-position:100%;}}
 
-/* الصندوق */
-.container{
-  position:relative;background:rgba(255,255,255,0.05);
-  border-radius:40px;border:1px solid rgba(255,255,255,0.15);
-  padding:50px 35px;width:95%;max-width:560px;
-  backdrop-filter:blur(20px) saturate(180%);
-  box-shadow:inset 0 0 20px rgba(255,255,255,0.15),
-             0 0 60px rgba(0,183,255,0.25),
-             0 0 100px rgba(139,92,246,0.15);
-  overflow:hidden;transition:0.5s;
+/* تنسيق العنوان الداخلي لتحديد موضع الكلمات */
+#title-glow {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
 }
-.container:hover{box-shadow:0 0 80px rgba(0,183,255,0.5);transform:scale(1.01);}
+
+/* تنسيق الكلمات داخل العنوان */
+#title-glow span {
+  padding: 0 5px;
+  /* تحديد سرعة الانتقال لتتناسب مع سرعة التناوب (1000ms) */
+  transition: all 0.9s ease-in-out; 
+  color: rgba(255, 255, 255, 0.1); 
+  text-shadow: none; 
+  opacity: 0.1; 
+  margin-bottom: 5px; 
+}
+/* تنسيق خاص للسطر الثاني الذي يحتوي اعرف قبضك لجعلهما بجانب بعض */
+#word-group-1 {
+    display: flex;
+    flex-direction: row; 
+    font-size: 3.7rem; 
+}
+#word-group-1 span {
+    margin: 0 5px; 
+    display: inline-block; 
+}
+
+/* MTA تكون دائماً فوق */
+#glow-word-mta {
+    display: block;
+    font-size: 4.5rem; 
+    margin-bottom: 10px;
+}
+
+
+/* فئة التوهج النيوني الأقوى لـ MTA (وردي/أخضر نيون) */
+.neon-glow-mta {
+  /* التدرج اللوني: من الوردي إلى الأخضر النيوني */
+  background:linear-gradient(90deg, var(--color-accent), var(--color-success));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  /* === زيادة قوة الظل النيوني القصوى (أوضح) === */
+  text-shadow: 
+    0 0 20px #fff, /* توهج أبيض قوي */
+    0 0 35px var(--color-accent), 
+    0 0 60px var(--color-success),
+    0 0 80px var(--color-accent); /* توهج واسع وقوي جداً */
+  color: var(--color-text-light); 
+  opacity: 1;
+}
+
+/* فئة التوهج النيوني الأقوى لكلمة "اعرف" (أزرق/بنفسجي) */
+.neon-glow-word-1 {
+  /* التدرج اللوني: من الأزرق إلى البنفسجي */
+  background:linear-gradient(90deg,var(--color-primary),var(--color-secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  /* === زيادة قوة الظل النيوني القصوى (أوضح) === */
+  text-shadow: 
+    0 0 20px #fff, /* توهج أبيض قوي */
+    0 0 35px var(--color-primary), 
+    0 0 60px var(--color-secondary),
+    0 0 80px var(--color-primary); /* توهج واسع وقوي جداً */
+  color: var(--color-text-light); 
+  opacity: 1;
+}
+
+/* فئة التوهج النيوني الأقوى لكلمة "قبضك" (بنفسجي/وردي) */
+.neon-glow-word-2 {
+  /* التدرج اللوني: من البنفسجي إلى الوردي */
+  background:linear-gradient(90deg,var(--color-secondary),var(--color-accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  /* === زيادة قوة الظل النيوني القصوى (أوضح) === */
+  text-shadow: 
+    0 0 20px #fff, /* توهج أبيض قوي */
+    0 0 35px var(--color-secondary), 
+    0 0 60px var(--color-accent),
+    0 0 80px var(--color-secondary); /* توهج واسع وقوي جداً */
+  color: var(--color-text-light); 
+  opacity: 1;
+}
+
+/* مربع اسم المندوب في الأعلى (ثابت) - إضاءة هادئة */
+.rider-name-display {
+  font-size: 1.5rem; 
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 25px;
+  padding: 8px 15px; 
+  border-radius: 20px;
+  width: auto; 
+  max-width: 450px; 
+  color: var(--color-text-light);
+  background: rgba(0, 183, 255, 0.1); 
+  border: 2px solid rgba(0, 183, 255, 0.3); 
+  box-shadow: 0 0 10px rgba(0, 183, 255, 0.4), inset 0 0 4px rgba(139, 92, 246, 0.4); 
+  animation: subtleGlow 4s infinite ease-in-out;
+  transform: translateZ(0);
+}
+.rider-name-display span {
+    background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.3); 
+}
+@keyframes subtleGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 183, 255, 0.4), inset 0 0 3px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.5), inset 0 0 5px rgba(0, 183, 255, 0.4); }
+}
+
+
+/* الصندوق الرئيسي (Container) - ثابت بدون حركة */
+.container{
+  position:relative;
+  background:rgba(255,255,255,0.015); 
+  border-radius:40px; 
+  padding:50px 35px;width:95%;max-width:600px; 
+  backdrop-filter:blur(8px); 
+  box-shadow:inset 0 0 50px rgba(0,0,0,0.8),
+             0 10px 30px rgba(0,0,0,0.7), 
+             0 0 30px rgba(0,183,255,0.3); 
+  overflow:hidden;
+  transform: translateZ(0); 
+}
 
 /* إدخال البيانات */
-.input-box{position:relative;width:100%;margin:25px 0;}
+.input-box{position:relative;width:100%;margin:30px 0;}
 .input-box input{
-  width:100%;padding:18px 14px;border-radius:40px;
-  border:2px solid rgba(255,255,255,0.2);
-  font-size:1.1rem;text-align:center;color:#fff;
-  background:rgba(255,255,255,0.05);outline:none;transition:0.4s ease;
+  width:100%;padding:18px 14px;border-radius:30px;
+  border:none; 
+  font-size:1.1rem;text-align:center;color:var(--color-text-light);
+  background:rgba(0,0,0,0.4); 
+  outline:none;transition:0.4s ease;
+  box-shadow:inset 5px 5px 15px rgba(0,0,0,0.9), 
+             inset -5px -5px 15px rgba(255,255,255,0.08); 
 }
 .input-box input:focus{
-  border-color:#00b7ff;box-shadow:0 0 30px rgba(0,183,255,0.7);
-  transform:scale(1.02);
+  background:rgba(0,0,0,0.7);
+  box-shadow:inset 5px 5px 20px rgba(0,0,0,1), 
+             0 0 10px rgba(0, 183, 255, 0.5); 
 }
 .input-box label{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  color:#b3e5ff;font-size:1.05rem;pointer-events:none;transition:0.3s;
+  color:#b3e5ff; 
+  font-size:1.05rem;pointer-events:none;transition:0.3s;
 }
 .input-box input:focus+label,
 .input-box input:not(:placeholder-shown)+label{
-  top:-10px;font-size:0.8rem;color:#38bdf8;
-  background:rgba(0,0,0,0.6);padding:0 8px;border-radius:8px;
+  top:-15px;font-size:0.8rem;color:var(--color-accent);
+  background:var(--color-dark-bg);padding:0 8px;border-radius:8px;
+  transform: translate(-50%, 0%);
+  z-index: 10;
 }
 
 /* الأزرار */
 button{
-  width:100%;margin-top:20px;padding:15px;font-size:1.2rem;font-weight:800;
-  border:none;border-radius:40px;color:#fff;
-  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  cursor:pointer;transition:0.3s;box-shadow:0 0 25px rgba(0,183,255,0.3);
+  width:100%;margin-top:30px;padding:16px;font-size:1.3rem;font-weight:900;
+  border:none;border-radius:40px;color:var(--color-dark-bg);
+  background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
+  cursor:pointer;transition:0.4s;
+  box-shadow:0 0 15px rgba(0,183,255,0.5); 
 }
-button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
+button:hover{
+  box-shadow:0 0 25px rgba(0,183,255,0.8);
+}
 
 /* علامة النجاح */
 #successMark{
   position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
-  font-size:5rem;color:#00ff88;text-shadow:0 0 30px #00ff88;
+  font-size:5rem;color:var(--color-success);text-shadow:0 0 15px var(--color-success); 
   opacity:0;transition:all 0.5s ease;z-index:999;
 }
 #successMark.show{
   opacity:1;transform:translate(-50%,-50%) scale(1.2);
   animation:pulse 2s ease forwards;
 }
-@keyframes pulse{
-  0%{transform:translate(-50%,-50%) scale(0);}
-  25%{transform:translate(-50%,-50%) scale(1.2);}
-  50%{transform:translate(-50%,-50%) scale(1);}
-  100%{transform:translate(-50%,-50%) scale(0);}
-}
 
 /* صفحة التأكيد */
 #confirmPage{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:radial-gradient(circle at top,#09142a,#000814 80%);
+  background:rgba(0, 0, 0, 0.9); 
   display:none;flex-direction:column;justify-content:center;align-items:center;
   z-index:1000;
+  backdrop-filter: blur(8px);
 }
 #confirmPage.show{display:flex;animation:fadeIn 0.5s ease forwards;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* صندوق التأكيد */
+#confirmPage .container {
+  transform:none; 
+  max-width:650px; 
+  width:90%;
+  padding:30px; 
+  text-align:center;
+  box-shadow: 0 0 10px rgba(0, 183, 255, 0.4), inset 0 0 5px rgba(0, 183, 255, 0.2); 
+  animation: none; 
+}
+
+
+/* اسم المندوب في التأكيد */
 #riderName{
-  font-size:2.2rem;font-weight:900;margin-bottom:40px;text-align:center;
-  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
+  font-size:2.5rem; 
+  font-weight:900;
+  margin-bottom:25px; 
+  text-align:center;
+  background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height: 1.2; 
 }
-.confirm-buttons{display:flex;gap:40px;}
+.confirm-buttons{
+  display:flex;
+  gap:30px; 
+  justify-content: center;
+}
 .confirm-buttons button{
-  width:140px;padding:15px;font-size:1.2rem;border:none;border-radius:40px;
-  color:#fff;font-weight:800;cursor:pointer;transition:0.3s;
+  width: 150px; 
+  border-radius:40px;
+  padding:12px 20px; 
+  font-size:1.1rem; 
+  color: var(--color-dark-bg);
+  font-weight: 700;
+  transition: all 0.2s;
+  margin: 0; 
+  box-shadow: none !important;
+  animation: none !important;
 }
-.confirm-yes{background:#00ff88;box-shadow:0 0 30px #00ff88;}
-.confirm-no{background:#ff4444;box-shadow:0 0 30px #ff4444;}
-.confirm-yes:hover,.confirm-no:hover{transform:scale(1.1);}
 
-/* بيانات القبض */
+/* زر التأكيد (نعم) */
+.confirm-yes{
+  background:var(--color-success);
+}
+/* زر اللا (لا) */
+.confirm-no{
+  background:var(--color-error);
+}
+
+
+/* بيانات القبض - مربعات متعددة الألوان (ثابتة) */
 .salary-box{
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:20px;padding:15px 20px;margin:10px 0;
+  background:rgba(255,255,255,0.05);
+  border:none; 
+  border-radius:25px; 
+  padding:18px 25px; 
+  margin:12px 0; 
   display:flex;justify-content:space-between;align-items:center;
-  font-size:1.2rem;box-shadow:inset 0 0 10px rgba(255,255,255,0.05),
-  0 0 15px rgba(0,183,255,0.2);transition:0.3s;
+  font-size:1.2rem; 
+  box-shadow:inset 0 0 10px rgba(0,0,0,0.6), 0 0 8px rgba(255,255,255,0.05);
 }
-.salary-box:hover{transform:scale(1.03);box-shadow:0 0 25px rgba(56,189,248,0.4);}
-.salary-key{color:#b3e5ff;font-weight:700;}
-.salary-value{font-weight:900;color:#fff;}
+.salary-key{color:#cceeff;font-weight:700;}
+.salary-value{font-weight:900;}
+.color-1 { --current-color: var(--color-box-1); }
+.color-2 { --current-color: var(--color-box-2); }
+.color-3 { --current-color: var(--color-box-3); }
+.color-4 { --current-color: var(--color-box-4); }
+.color-5 { --current-color: var(--color-box-5); }
+.salary-box.negative { color: var(--color-error); }
 
-/* الصافي */
+
+/* الصافي - ثابت وهادئ (كما طلبته في المرة السابقة) */
 .net-box{
-  margin-top:25px;text-align:center;
-  background:linear-gradient(135deg,#00b7ff,#8b5cf6,#ec4899);
-  border-radius:30px;padding:22px;font-size:1.9rem;font-weight:900;color:#fff;
-  position:relative;overflow:hidden;
-  box-shadow:0 0 40px rgba(0,183,255,0.6),inset 0 0 25px rgba(255,255,255,0.1);
-  animation:glowPulse 3s infinite ease-in-out;
+  margin-top:40px;
+  text-align:center;
+  background:rgba(255,255,255,0.05); 
+  border-radius:40px;
+  padding:15px; 
+  font-size:1.8rem; 
+  font-weight:900;
+  color:var(--color-text-light); 
+  
+  border: 1px solid rgba(0, 183, 255, 0.2); 
+  box-shadow:0 0 15px rgba(0,183,255,0.3);
+  
+  animation: none;
+  transform: translateZ(0); 
 }
-@keyframes glowPulse{
-  0%,100%{box-shadow:0 0 40px rgba(0,183,255,0.6);}
-  50%{box-shadow:0 0 60px rgba(236,72,153,0.7);}
-}
-.net-box::before{
-  content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
-  background:conic-gradient(from 0deg,#00b7ff,#8b5cf6,#ec4899,#00b7ff);
-  animation:rotateGradient 6s linear infinite;z-index:0;opacity:0.3;
-}
-@keyframes rotateGradient{to{transform:rotate(360deg);}}
-.net-box span{position:relative;z-index:2;text-shadow:0 0 15px rgba(255,255,255,0.9);}
 
-/* الكلمات المتحركة */
-.bg-words{display:flex;justify-content:center;gap:40px;margin-top:-20px;}
-.bg-word{
-  font-size:4.5rem;font-weight:900;
-  background:linear-gradient(90deg,#00b7ff,#8b5cf6,#ec4899);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  opacity:0.25;animation:float 5s ease-in-out infinite;
+/* تنسيق القيمة الرقمية داخل مربع الصافي */
+.net-box span.net-value-number {
+  position: relative;
+  font-size: 2.5rem; 
+  font-family: monospace; 
+  
+  color: var(--color-primary); 
+  -webkit-text-fill-color: var(--color-primary); 
+  background: none;
+  
+  text-shadow: 
+    0 0 5px rgba(255, 255, 255, 0.4);
+  
+  animation: none; 
+  display: inline-block;
+  padding: 0 5px;
 }
-.bg-word:nth-child(2){animation-direction:reverse;}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+
+/* تنسيق باقي النص داخل الصندوق الصافي (الرمز والكلمات) */
+.net-box span.net-label {
+    position:relative;
+    text-shadow: none; 
+    font-size: 1.5rem; 
+    color: var(--color-text-light);
+}
 </style>
 </head>
 <body>
 
-<h1>اعرف قبضك</h1>
+<canvas id="threeCanvas"></canvas>
+
+<!-- تحديث هيكل العنوان لدمج MTA وجعل الكلمات بجانب بعضها -->
+<h1>
+  <div id="title-glow">
+    <span id="glow-word-mta">MTA</span> 
+    <div id="word-group-1">
+        <span id="glow-word-1">اعرف</span> 
+        <span id="glow-word-2">قبضك</span>
+    </div>
+  </div>
+</h1>
+
+<!-- المربع الجديد لعرض اسم المندوب بشكل أنيق -->
+<div class="rider-name-display" id="riderNameDisplay" style="display: none;">
+  <!-- يتم ملؤه عبر JavaScript -->
+</div>
+
 <div class="container" id="mainPage">
   <div class="input-box">
     <input type="text" id="riderId" placeholder=" " required>
@@ -175,55 +394,170 @@ button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(56,189,248,0.6);}
   <div id="result"></div>
 </div>
 
-<div id="successMark">✔️</div>
+<div id="successMark">??</div>
 
 <div id="confirmPage">
-  <div id="riderName"></div>
-  <div class="confirm-buttons">
-    <button class="confirm-yes" onclick="confirmYes()">تأكيد</button>
-    <button class="confirm-no" onclick="confirmNo()">لا</button>
+  <div class="container"> 
+    <h3 style="color:var(--color-text-light); margin-bottom:15px; font-size:1.3rem; font-weight:700;">تأكيد بيانات المندوب</h3>
+    <div id="riderName"></div>
+    <div class="confirm-buttons">
+      <button class="confirm-yes" onclick="confirmYes()">تأكيد</button>
+      <button class="confirm-no" onclick="confirmNo()">لا</button>
+    </div>
   </div>
 </div>
 
-<div class="bg-words">
-  <div class="bg-word">العربي</div>
-  <div class="bg-word">MTA</div>
-</div>
-
 <script>
+// لا يوجد تغيير هنا - الحفاظ على متغيرات البيانات والمفاتيح
 const sheetId="1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
 const apiKey="AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
 const range="Sheet1";
 let salaries={};
 let currentRider=null;
 
+// دالة تهيئة وتحريك الخلفية ثلاثية الأبعاد (Three.js)
+function initThreeJS() {
+    const canvas = document.getElementById('threeCanvas');
+    if (!canvas) return; 
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const ambientLight = new THREE.AmbientLight(0x404040, 2); 
+    scene.add(ambientLight);
+
+    // إنشاء شبكة من الكرات النيونية
+    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    // تقليل شدة الانبعاث الضوئي
+    const material = new THREE.MeshPhongMaterial({ color: 0x00b7ff, emissive: 0x00b7ff, emissiveIntensity: 0.1 }); 
+    const particles = [];
+    const particleCount = 250; 
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = new THREE.Mesh(geometry, material);
+        particle.position.set(
+            (Math.random() - 0.5) * 200,
+            (Math.random() - 0.5) * 200,
+            (Math.random() - 0.5) * 200
+        );
+        particle.scale.set(0.1 + Math.random() * 0.2, 0.1 + Math.random() * 0.2, 0.1 + Math.random() * 0.2);
+        scene.add(particle);
+        particles.push(particle);
+    }
+
+    camera.position.z = 50;
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        particles.forEach(p => {
+            p.rotation.x += 0.005; 
+            p.rotation.y += 0.002; 
+            p.position.z += 0.02;  
+            if (p.position.z > 100) {
+                p.position.z = -100;
+            }
+        });
+
+        camera.rotation.y += 0.0002; 
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+}
+
+// دالة التحكم في إضاءة العنوان بالتناوب التسلسلي (تم إبطاؤها)
+function startTitleGlow() {
+    const words = [
+        { element: document.getElementById('glow-word-mta'), className: 'neon-glow-mta' },
+        { element: document.getElementById('glow-word-1'), className: 'neon-glow-word-1' },
+        { element: document.getElementById('glow-word-2'), className: 'neon-glow-word-2' }
+    ];
+    let currentIndex = 0;
+
+    function toggleGlow() {
+        // إطفاء الكل
+        words.forEach(w => w.element.classList.remove(w.className));
+
+        // إضاءة الكلمة الحالية
+        words[currentIndex].element.classList.add(words[currentIndex].className);
+
+        // الانتقال للكلمة التالية (أو العودة للأولى)
+        currentIndex = (currentIndex + 1) % words.length;
+    }
+
+    // تم إبطاء التناوب (كل 1000 مللي ثانية) لإعطاء حركة بطيئة
+    setInterval(toggleGlow, 1000); 
+    
+    toggleGlow();
+}
+
+
 async function fetchData(){
-  const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
-  const response=await fetch(url);
-  const data=await response.json();
-  const rows=data.values;
-  const headers=rows[0];
-  rows.slice(1).forEach(row=>{
-    let record={};
-    headers.forEach((header,i)=>record[header]=row[i]);
-    salaries[record["Rider ID"]]=record;
-  });
+  try {
+    const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+    const response=await fetch(url);
+    const data=await response.json();
+    const rows=data.values;
+    
+    if (!rows || rows.length === 0) {
+        console.error("No data found in the spreadsheet.");
+        document.getElementById("result").innerHTML = '<div style="text-align:center;background:rgba(255,0,0,0.3);padding:15px;border-radius:20px;font-size:1rem; color: var(--color-error); box-shadow: 0 0 15px var(--color-error);">?? لم يتم العثور على بيانات. تأكد من أن Google Sheet ليس فارغًا.</div>';
+        return; 
+    }
+
+    const headers=rows[0];
+    rows.slice(1).forEach(row=>{
+      let record={};
+      headers.forEach((header,i)=>record[header]=row[i]);
+      if (record["Rider ID"] && record["Rider ID"].trim()) {
+        salaries[record["Rider ID"].trim()] = record;
+      }
+    });
+    
+    const resultDiv = document.getElementById("result");
+    if (resultDiv.innerHTML.includes('جاري تحميل البيانات')) {
+        resultDiv.innerHTML = '';
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    document.getElementById("result").innerHTML = '<div style="text-align:center;background:rgba(255,0,0,0.3);padding:15px;border-radius:20px;font-size:1rem; color: var(--color-error); box-shadow: 0 0 15px var(--color-error);">?? فشل تحميل البيانات. تأكد من مفتاح API و Sheet ID.</div>';
+  }
 }
 
 function checkLogin(){
   const password=document.getElementById("password").value.trim();
   const id=document.getElementById("riderId").value.trim();
   const successMark=document.getElementById("successMark");
+  const resultDiv=document.getElementById("result");
+  
+  if (Object.keys(salaries).length === 0) {
+      resultDiv.innerHTML='<div style="text-align:center;background:rgba(255,255,255,0.1);padding:15px;border-radius:14px;font-size:1rem; color: var(--color-primary);">? جاري تحميل البيانات... انتظر قليلاً.</div>';
+      fetchData(); 
+      return;
+  }
+  
+  // شرط الدخول (MTA)
   if(password==="MTA" && salaries[id]){
     currentRider=id;
+    resultDiv.innerHTML = '';
+    
     successMark.classList.add("show");
     setTimeout(()=>{
       successMark.classList.remove("show");
       showConfirmPage();
-    },2000);
+    },800); 
   } else {
-    const resultDiv=document.getElementById("result");
-    resultDiv.innerHTML='<div style="text-align:center;background:rgba(255,0,0,0.2);padding:15px;border-radius:14px;font-size:1rem;">❌ بيانات غير صحيحة</div>';
+    resultDiv.innerHTML='<div style="text-align:center;background:rgba(255,0,0,0.3);padding:15px;border-radius:20px;font-size:1rem; color: var(--color-error); box-shadow: 0 0 15px var(--color-error);">? بيانات غير صحيحة</div>';
   }
 }
 
@@ -240,6 +574,11 @@ function showConfirmPage(){
 function confirmNo(){
   document.getElementById("confirmPage").classList.remove("show");
   document.getElementById("mainPage").style.display="block";
+  document.querySelectorAll('.input-box').forEach(el => el.style.display = 'block');
+  const button = document.querySelector('.container button');
+  if (button) button.style.display = 'block';
+  document.getElementById("result").innerHTML = '';
+  document.getElementById("riderNameDisplay").style.display = 'none'; 
 }
 
 function confirmYes(){
@@ -250,25 +589,82 @@ function confirmYes(){
 function showSalary(){
   const id=currentRider;
   const resultDiv=document.getElementById("result");
-  resultDiv.innerHTML=""; // ✅ تفريغ النتيجة قبل العرض الجديد
+  const riderNameDisplay = document.getElementById("riderNameDisplay"); 
+
+  const record = salaries[id];
+  const riderName = record["Rider Name"] || record["الاسم"] || "المندوب";
+
+  // إعداد مربع اسم المندوب
+  riderNameDisplay.innerHTML = `<span>مرحباً، ${riderName}</span>`;
+  riderNameDisplay.style.display = 'block';
+
+  document.querySelectorAll('.input-box').forEach(el => el.style.display = 'none');
+  const button = document.querySelector('.container button');
+  if (button) button.style.display = 'none';
+
+  resultDiv.innerHTML=""; 
   let html='';
-  Object.entries(salaries[id]).forEach(([key,value])=>{
-    if(key!=="Rider ID" && !/net|صافي|القبض/i.test(key)){
-      let color=key.toLowerCase().includes("عجز")?"#ff6666":"#fff";
-      html+= `<div class="salary-box">
+  
+  let netValue = "غير متاح";
+  let netCurrency = " جنيه";
+  let netNumber = "غير متاح";
+  let boxCounter = 0;
+
+  Object.entries(record).forEach(([key,value])=>{
+    const trimmedKey = key.trim();
+    
+    // فصل القيمة الصافية
+    if(/net|صافي|القبض/i.test(key) && !/اجمالي/i.test(key)){
+        netValue = value;
+        
+        // محاولة استخراج الرقم والعملة
+        const match = netValue.match(/(\d[\d,.]*)/); // ابحث عن أي رقم
+        if (match) {
+            netNumber = match[0];
+            netCurrency = netValue.replace(netNumber, "").trim() || " جنيه";
+        } else {
+             netNumber = netValue;
+             netCurrency = "";
+        }
+        return; 
+    }
+    
+    if(trimmedKey!=="Rider ID" && !/net|صافي|القبض|الاسم|Rider Name/i.test(key) && trimmedKey !== ""){
+      boxCounter++;
+      const colorClass = `color-${((boxCounter - 1) % 5) + 1}`; 
+      
+      let isNegative = key.toLowerCase().includes("عجز") || key.toLowerCase().includes("خصم");
+      let color = isNegative ? "var(--color-error)" : "var(--color-text-light)";
+      const displayValue = (value === "" || value === null || value === undefined || value.trim() === "") ? "0" : value;
+      let currency = (isNaN(parseFloat(displayValue)) || displayValue === "0" || displayValue.match(/[a-zA-Z]/)) ? "" : " ج";
+      
+      html+= `<div class="salary-box ${colorClass} ${isNegative ? 'negative' : ''}">
                 <div class="salary-key">${key}</div>
-                <div class="salary-value" style="color:${color};">${value}${isNaN(value)?"":" جنيه"}</div>
+                <div class="salary-value" style="color:${color};">${displayValue}${currency}</div>
               </div>`;
     }
   });
-  const netKey = Object.keys(salaries[id]).find(k => /net|صافي|القبض/i.test(k));
-  const net = netKey && salaries[id][netKey] ? salaries[id][netKey] : "غير متاح";
-  html+= `<div class="net-box"><span>💰 القبض الصافي: ${net} جنيه</span></div>`;
+
+  // مربع القبض الصافي الهادئ
+  html+= `<div class="net-box">
+            <span class="net-label">?? القبض الصافي </span>
+            <span class="net-value-number">${netNumber}</span>
+            <span class="net-label">${netCurrency}</span>
+          </div>`;
+          
   resultDiv.innerHTML=html;
   document.getElementById("mainPage").style.display="block";
 }
 
-fetchData();
+
+// بدء تحميل البيانات وتهيئة الخلفية ثلاثية الأبعاد
+window.onload = function() {
+    initThreeJS();
+    fetchData();
+    // التأكد من تشغيل تأثير إضاءة العنوان النيونية
+    startTitleGlow(); 
+}
+
 </script>
 </body>
 </html>
