@@ -66,12 +66,12 @@ h1{
 /* تنسيق الكلمات داخل العنوان */
 #title-glow span {
   padding: 0 5px;
-  /* تحديد سرعة الانتقال لتتناسب مع سرعة التناوب (1000ms) */
   transition: all 0.9s ease-in-out; 
-  color: rgba(255, 255, 255, 0.1); 
-  text-shadow: none; 
-  opacity: 0.1; 
+  color: rgba(255, 255, 255, 0.5); /* وضوح أكبر */
+  text-shadow: 0 0 8px rgba(255,255,255,0.2); /* توهج بسيط ثابت */
+  opacity: 0.8; 
   margin-bottom: 5px; 
+}
 }
 /* تنسيق خاص للسطر الثاني الذي يحتوي اعرف قبضك لجعلهما بجانب بعض */
 #word-group-1 {
@@ -394,7 +394,7 @@ button:hover{
   <div id="result"></div>
 </div>
 
-<div id="successMark">??</div>
+<div id="successMark">✅</div>
 
 <div id="confirmPage">
   <div class="container"> 
@@ -646,11 +646,12 @@ function showSalary(){
   });
 
   // مربع القبض الصافي الهادئ
-  html+= `<div class="net-box">
-            <span class="net-label">?? القبض الصافي </span>
+html+= `<div class="net-box">
+            <span class="net-label">القبض الصافي </span>
             <span class="net-value-number">${netNumber}</span>
             <span class="net-label">${netCurrency}</span>
           </div>`;
+
           
   resultDiv.innerHTML=html;
   document.getElementById("mainPage").style.display="block";
