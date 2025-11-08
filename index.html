@@ -394,7 +394,7 @@ button:hover{
   <div id="result"></div>
 </div>
 
-<div id="successMark">✅</div>
+<div id="successMark">✔️</div>
 
 <div id="confirmPage">
   <div class="container"> 
@@ -606,7 +606,7 @@ function showSalary(){
   let html='';
   
   let netValue = "غير متاح";
-  let netCurrency = " جنيه";
+  let netCurrency = " ";
   let netNumber = "غير متاح";
   let boxCounter = 0;
 
@@ -621,7 +621,7 @@ function showSalary(){
         const match = netValue.match(/(\d[\d,.]*)/); // ابحث عن أي رقم
         if (match) {
             netNumber = match[0];
-            netCurrency = netValue.replace(netNumber, "").trim() || " جنيه";
+            netCurrency = netValue.replace(netNumber, "").trim() || " ";
         } else {
              netNumber = netValue;
              netCurrency = "";
@@ -636,7 +636,7 @@ function showSalary(){
       let isNegative = key.toLowerCase().includes("عجز") || key.toLowerCase().includes("خصم");
       let color = isNegative ? "var(--color-error)" : "var(--color-text-light)";
       const displayValue = (value === "" || value === null || value === undefined || value.trim() === "") ? "0" : value;
-      let currency = (isNaN(parseFloat(displayValue)) || displayValue === "0" || displayValue.match(/[a-zA-Z]/)) ? "" : " ج";
+      let currency = (isNaN(parseFloat(displayValue)) || displayValue === "0" || displayValue.match(/[a-zA-Z]/)) ? "" : " ";
       
       html+= `<div class="salary-box ${colorClass} ${isNegative ? 'negative' : ''}">
                 <div class="salary-key">${key}</div>
