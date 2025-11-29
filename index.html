@@ -1,671 +1,226 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اعرف قبضك</title>
-<!-- خط كايرو لدعم العربية -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<!-- مكتبة Three.js للخلفية ثلاثية الأبعاد -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<style>
-/* متغيرات الألوان الأصلية (الأزرق، البنفسجي، الوردي) */
-:root {
-  --color-dark-bg: #00050f; /* خلفية داكنة جداً */
-  --color-primary: #00b7ff; /* أزرق سماوي نيون */
-  --color-secondary: #8b5cf6; /* بنفسجي نيون */
-  --color-accent: #ec4899; /* وردي نيون */
-  --color-success: #00ff88; /* أخضر نيون */
-  --color-error: #ff4444; /* أحمر نيون */
-  --color-text-light: #fff;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اعرف قبضك</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+    body {
+      margin: 0; padding: 0; min-height: 100vh;
+      background: radial-gradient(circle at top, #000000, #111827, #000);
+      color: #fff; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      overflow-x: hidden; position: relative;
+    }
 
-  /* لوحات الألوان لمربعات القبض */
-  --color-box-1: #00b7ff; 
-  --color-box-2: #8b5cf6;
-  --color-box-3: #10b981; 
-  --color-box-4: #ff9800; 
-  --color-box-5: #ec4899; 
-}
-*{box-sizing:border-box;font-family:'Cairo',sans-serif;margin:0;padding:0;}
+    /* شعار MTA */
+    .logo-mta {
+      margin-top: 30px;
+      font-size: 3.4rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-align: center;
+      background: linear-gradient(90deg, #00eaff, #00b7ff, #38bdf8, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px #00cfffaa, 0 0 45px #00cfff55;
+      animation: glow 3s ease-in-out infinite alternate;
+    }
 
-/* إعداد الـ 3D والخلفية الرئيسية */
-body{
-  min-height:100vh;
-  background:var(--color-dark-bg);
-  color:var(--color-text-light);
-  display:flex;flex-direction:column;align-items:center;
-  overflow-x:hidden;
-  position:relative;
-}
+    @keyframes glow {
+      0% { text-shadow: 0 0 15px #00cfff55, 0 0 30px #00cfff33; }
+      100% { text-shadow: 0 0 35px #00eaffcc, 0 0 65px #00eaff88; }
+    }
 
-/* الخلفية ثلاثية الأبعاد (Canvas) */
-#threeCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; 
-  opacity: 0.3; 
-}
+    h1 {
+      margin-top: 10px; /* تم تقليل المسافة لتناسب اللوجو */
+      font-size: 3rem; font-weight: bold;
+      background: linear-gradient(90deg, #00b7ff, #38bdf8, #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px #00b7ff80;
+    }
 
-/* العنوان الرئيسي (H1) */
-h1{
-  font-size:3.7rem;font-weight:900;text-align:center;
-  margin:30px 0 10px 0;
-  line-height: 1.1; 
-}
+    .container {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(15px);
+      border-radius: 25px; border: 2px solid #38bdf880;
+      box-shadow: 0 0 30px #00b7ff33;
+      padding: 40px 25px; width: 90%; max-width: 600px;
+      margin-top: 30px; position: relative;
+    }
+    label { font-size: 1.4rem; font-weight: 700; display: block; margin-bottom: 14px; text-align: center; }
+    input {
+      width: 100%; padding: 18px; border-radius: 16px;
+      border: 2px solid #00b7ff; font-size: 1.4rem;
+      text-align: center; color: #111; background: #f8fafc;
+      margin-bottom: 16px;
+    }
+    button {
+      width: 100%; background: linear-gradient(90deg, #00b7ff, #38bdf8);
+      color: white; border: none; padding: 16px; font-size: 1.3rem;
+      font-weight: bold; border-radius: 14px; cursor: pointer;
+    }
 
-/* تنسيق العنوان الداخلي لتحديد موضع الكلمات */
-#title-glow {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-}
+    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 1.3rem; }
+    tr { cursor: pointer; }
+    td { padding: 12px 10px; border-radius: 10px; background: rgba(255,255,255,0.08); }
 
-/* تنسيق الكلمات داخل العنوان */
-#title-glow span {
-  padding: 0 5px;
-  transition: all 0.9s ease-in-out; 
-  color: rgba(255, 255, 255, 0.5); /* وضوح أكبر */
-  text-shadow: 0 0 8px rgba(255,255,255,0.2); /* توهج بسيط ثابت */
-  opacity: 0.8; 
-  margin-bottom: 5px; 
-}
-}
-/* تنسيق خاص للسطر الثاني الذي يحتوي اعرف قبضك لجعلهما بجانب بعض */
-#word-group-1 {
-    display: flex;
-    flex-direction: row; 
-    font-size: 3.7rem; 
-}
-#word-group-1 span {
-    margin: 0 5px; 
-    display: inline-block; 
-}
+    .net-box { margin-top: 35px; text-align: center; }
+    .net-value {
+      background: linear-gradient(90deg, #0077ff, #00b7ff);
+      color: #fff; font-size: 2.7rem; font-weight: 900;
+      border-radius: 20px; padding: 25px 0;
+      box-shadow: 0 0 25px #00b7ffaa;
+    }
+    .net-label { margin-top: 12px; color: #b7e3ff; font-size: 1.3rem; font-weight: 700; }
 
-/* MTA تكون دائماً فوق */
-#glow-word-mta {
-    display: block;
-    font-size: 4.5rem; 
-    margin-bottom: 10px;
-}
+    .loader-screen {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 999; display: none;
+    }
 
+    .glass-loader {
+      width: 140px; height: 140px;
+      border-radius: 50%; position: relative;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      border: 4px solid rgba(255,255,255,0.15);
+      box-shadow: inset 0 0 25px rgba(255,255,255,0.15),
+                  0 0 25px #00b7ffaa,
+                  0 0 50px #0088ff55;
+      animation: rotate 1.6s linear infinite;
+    }
+    .glass-loader::before {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.25) 60%);
+      filter: blur(4px);
+    }
 
-/* فئة التوهج النيوني الأقوى لـ MTA (وردي/أخضر نيون) */
-.neon-glow-mta {
-  /* التدرج اللوني: من الوردي إلى الأخضر النيوني */
-  background:linear-gradient(90deg, var(--color-accent), var(--color-success));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  /* === زيادة قوة الظل النيوني القصوى (أوضح) === */
-  text-shadow: 
-    0 0 20px #fff, /* توهج أبيض قوي */
-    0 0 35px var(--color-accent), 
-    0 0 60px var(--color-success),
-    0 0 80px var(--color-accent); /* توهج واسع وقوي جداً */
-  color: var(--color-text-light); 
-  opacity: 1;
-}
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-/* فئة التوهج النيوني الأقوى لكلمة "اعرف" (أزرق/بنفسجي) */
-.neon-glow-word-1 {
-  /* التدرج اللوني: من الأزرق إلى البنفسجي */
-  background:linear-gradient(90deg,var(--color-primary),var(--color-secondary));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  /* === زيادة قوة الظل النيوني القصوى (أوضح) === */
-  text-shadow: 
-    0 0 20px #fff, /* توهج أبيض قوي */
-    0 0 35px var(--color-primary), 
-    0 0 60px var(--color-secondary),
-    0 0 80px var(--color-primary); /* توهج واسع وقوي جداً */
-  color: var(--color-text-light); 
-  opacity: 1;
-}
-
-/* فئة التوهج النيوني الأقوى لكلمة "قبضك" (بنفسجي/وردي) */
-.neon-glow-word-2 {
-  /* التدرج اللوني: من البنفسجي إلى الوردي */
-  background:linear-gradient(90deg,var(--color-secondary),var(--color-accent));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  /* === زيادة قوة الظل النيوني القصوى (أوضح) === */
-  text-shadow: 
-    0 0 20px #fff, /* توهج أبيض قوي */
-    0 0 35px var(--color-secondary), 
-    0 0 60px var(--color-accent),
-    0 0 80px var(--color-secondary); /* توهج واسع وقوي جداً */
-  color: var(--color-text-light); 
-  opacity: 1;
-}
-
-/* مربع اسم المندوب في الأعلى (ثابت) - إضاءة هادئة */
-.rider-name-display {
-  font-size: 1.5rem; 
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 25px;
-  padding: 8px 15px; 
-  border-radius: 20px;
-  width: auto; 
-  max-width: 450px; 
-  color: var(--color-text-light);
-  background: rgba(0, 183, 255, 0.1); 
-  border: 2px solid rgba(0, 183, 255, 0.3); 
-  box-shadow: 0 0 10px rgba(0, 183, 255, 0.4), inset 0 0 4px rgba(139, 92, 246, 0.4); 
-  animation: subtleGlow 4s infinite ease-in-out;
-  transform: translateZ(0);
-}
-.rider-name-display span {
-    background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.3); 
-}
-@keyframes subtleGlow {
-  0%, 100% { box-shadow: 0 0 8px rgba(0, 183, 255, 0.4), inset 0 0 3px rgba(139, 92, 246, 0.3); }
-  50% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.5), inset 0 0 5px rgba(0, 183, 255, 0.4); }
-}
-
-
-/* الصندوق الرئيسي (Container) - ثابت بدون حركة */
-.container{
-  position:relative;
-  background:rgba(255,255,255,0.015); 
-  border-radius:40px; 
-  padding:50px 35px;width:95%;max-width:600px; 
-  backdrop-filter:blur(8px); 
-  box-shadow:inset 0 0 50px rgba(0,0,0,0.8),
-             0 10px 30px rgba(0,0,0,0.7), 
-             0 0 30px rgba(0,183,255,0.3); 
-  overflow:hidden;
-  transform: translateZ(0); 
-}
-
-/* إدخال البيانات */
-.input-box{position:relative;width:100%;margin:30px 0;}
-.input-box input{
-  width:100%;padding:18px 14px;border-radius:30px;
-  border:none; 
-  font-size:1.1rem;text-align:center;color:var(--color-text-light);
-  background:rgba(0,0,0,0.4); 
-  outline:none;transition:0.4s ease;
-  box-shadow:inset 5px 5px 15px rgba(0,0,0,0.9), 
-             inset -5px -5px 15px rgba(255,255,255,0.08); 
-}
-.input-box input:focus{
-  background:rgba(0,0,0,0.7);
-  box-shadow:inset 5px 5px 20px rgba(0,0,0,1), 
-             0 0 10px rgba(0, 183, 255, 0.5); 
-}
-.input-box label{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  color:#b3e5ff; 
-  font-size:1.05rem;pointer-events:none;transition:0.3s;
-}
-.input-box input:focus+label,
-.input-box input:not(:placeholder-shown)+label{
-  top:-15px;font-size:0.8rem;color:var(--color-accent);
-  background:var(--color-dark-bg);padding:0 8px;border-radius:8px;
-  transform: translate(-50%, 0%);
-  z-index: 10;
-}
-
-/* الأزرار */
-button{
-  width:100%;margin-top:30px;padding:16px;font-size:1.3rem;font-weight:900;
-  border:none;border-radius:40px;color:var(--color-dark-bg);
-  background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
-  cursor:pointer;transition:0.4s;
-  box-shadow:0 0 15px rgba(0,183,255,0.5); 
-}
-button:hover{
-  box-shadow:0 0 25px rgba(0,183,255,0.8);
-}
-
-/* علامة النجاح */
-#successMark{
-  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
-  font-size:5rem;color:var(--color-success);text-shadow:0 0 15px var(--color-success); 
-  opacity:0;transition:all 0.5s ease;z-index:999;
-}
-#successMark.show{
-  opacity:1;transform:translate(-50%,-50%) scale(1.2);
-  animation:pulse 2s ease forwards;
-}
-
-/* صفحة التأكيد */
-#confirmPage{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0, 0, 0, 0.9); 
-  display:none;flex-direction:column;justify-content:center;align-items:center;
-  z-index:1000;
-  backdrop-filter: blur(8px);
-}
-#confirmPage.show{display:flex;animation:fadeIn 0.5s ease forwards;}
-
-/* صندوق التأكيد */
-#confirmPage .container {
-  transform:none; 
-  max-width:650px; 
-  width:90%;
-  padding:30px; 
-  text-align:center;
-  box-shadow: 0 0 10px rgba(0, 183, 255, 0.4), inset 0 0 5px rgba(0, 183, 255, 0.2); 
-  animation: none; 
-}
-
-
-/* اسم المندوب في التأكيد */
-#riderName{
-  font-size:2.5rem; 
-  font-weight:900;
-  margin-bottom:25px; 
-  text-align:center;
-  background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  line-height: 1.2; 
-}
-.confirm-buttons{
-  display:flex;
-  gap:30px; 
-  justify-content: center;
-}
-.confirm-buttons button{
-  width: 150px; 
-  border-radius:40px;
-  padding:12px 20px; 
-  font-size:1.1rem; 
-  color: var(--color-dark-bg);
-  font-weight: 700;
-  transition: all 0.2s;
-  margin: 0; 
-  box-shadow: none !important;
-  animation: none !important;
-}
-
-/* زر التأكيد (نعم) */
-.confirm-yes{
-  background:var(--color-success);
-}
-/* زر اللا (لا) */
-.confirm-no{
-  background:var(--color-error);
-}
-
-
-/* بيانات القبض - مربعات متعددة الألوان (ثابتة) */
-.salary-box{
-  background:rgba(255,255,255,0.05);
-  border:none; 
-  border-radius:25px; 
-  padding:18px 25px; 
-  margin:12px 0; 
-  display:flex;justify-content:space-between;align-items:center;
-  font-size:1.2rem; 
-  box-shadow:inset 0 0 10px rgba(0,0,0,0.6), 0 0 8px rgba(255,255,255,0.05);
-}
-.salary-key{color:#cceeff;font-weight:700;}
-.salary-value{font-weight:900;}
-.color-1 { --current-color: var(--color-box-1); }
-.color-2 { --current-color: var(--color-box-2); }
-.color-3 { --current-color: var(--color-box-3); }
-.color-4 { --current-color: var(--color-box-4); }
-.color-5 { --current-color: var(--color-box-5); }
-.salary-box.negative { color: var(--color-error); }
-
-
-/* الصافي - ثابت وهادئ (كما طلبته في المرة السابقة) */
-.net-box{
-  margin-top:40px;
-  text-align:center;
-  background:rgba(255,255,255,0.05); 
-  border-radius:40px;
-  padding:15px; 
-  font-size:1.8rem; 
-  font-weight:900;
-  color:var(--color-text-light); 
-  
-  border: 1px solid rgba(0, 183, 255, 0.2); 
-  box-shadow:0 0 15px rgba(0,183,255,0.3);
-  
-  animation: none;
-  transform: translateZ(0); 
-}
-
-/* تنسيق القيمة الرقمية داخل مربع الصافي */
-.net-box span.net-value-number {
-  position: relative;
-  font-size: 2.5rem; 
-  font-family: monospace; 
-  
-  color: var(--color-primary); 
-  -webkit-text-fill-color: var(--color-primary); 
-  background: none;
-  
-  text-shadow: 
-    0 0 5px rgba(255, 255, 255, 0.4);
-  
-  animation: none; 
-  display: inline-block;
-  padding: 0 5px;
-}
-
-/* تنسيق باقي النص داخل الصندوق الصافي (الرمز والكلمات) */
-.net-box span.net-label {
-    position:relative;
-    text-shadow: none; 
-    font-size: 1.5rem; 
-    color: var(--color-text-light);
-}
-</style>
+    .success-check {
+      font-size: 8rem;
+      color: #00ffbf;
+      text-shadow: 0 0 25px #00ffbfaa, 0 0 60px #00ffbf88;
+      display: none;
+      animation: checkPop 0.4s ease-out;
+    }
+    @keyframes checkPop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
+
 <body>
 
-<canvas id="threeCanvas"></canvas>
+  <!-- شعار MTA -->
+  <div class="logo-mta">MTA</div>
 
-<!-- تحديث هيكل العنوان لدمج MTA وجعل الكلمات بجانب بعضها -->
-<h1>
-  <div id="title-glow">
-    <span id="glow-word-mta">MTA</span> 
-    <div id="word-group-1">
-        <span id="glow-word-1">اعرف</span> 
-        <span id="glow-word-2">قبضك</span>
-    </div>
+  <h1>اعرف قبضك</h1>
+
+  <div class="loader-screen" id="loaderScreen">
+    <div class="glass-loader" id="loader"></div>
+    <div class="success-check" id="successCheck">✔</div>
   </div>
-</h1>
 
-<!-- المربع الجديد لعرض اسم المندوب بشكل أنيق -->
-<div class="rider-name-display" id="riderNameDisplay" style="display: none;">
-  <!-- يتم ملؤه عبر JavaScript -->
-</div>
-
-<div class="container" id="mainPage">
-  <div class="input-box">
-    <input type="text" id="riderId" placeholder=" " required>
+  <div class="container">
     <label for="riderId">ادخل Rider ID</label>
-  </div>
-  <div class="input-box">
-    <input type="password" id="password" placeholder=" " required>
-    <label for="password">ادخل الباسورد</label>
-  </div>
-  <button onclick="checkLogin()">عرض القبض</button>
-  <div id="result"></div>
-</div>
+    <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا" />
+    <button onclick="showSalary()">عرض التفاصيل</button>
 
-<div id="successMark">✔️</div>
+    <div style="text-align:center; margin-top:10px; font-size:1rem; color:#b7e3ff;">Best regards, Rami Nassim</div>
 
-<div id="confirmPage">
-  <div class="container"> 
-    <h3 style="color:var(--color-text-light); margin-bottom:15px; font-size:1.3rem; font-weight:700;">تأكيد بيانات المندوب</h3>
-    <div id="riderName"></div>
-    <div class="confirm-buttons">
-      <button class="confirm-yes" onclick="confirmYes()">تأكيد</button>
-      <button class="confirm-no" onclick="confirmNo()">لا</button>
+    <div id="result"></div>
+
+    <div class="net-box" id="netBox" style="display:none;">
+      <div class="net-value" id="netValue">0 </div>
+      <div class="net-label">صافي القبض الفعلي للطيار</div>
     </div>
   </div>
-</div>
 
-<script>
-// لا يوجد تغيير هنا - الحفاظ على متغيرات البيانات والمفاتيح
-const sheetId="1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
-const apiKey="AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
-const range="Sheet1";
-let salaries={};
-let currentRider=null;
+  <script>
+    const sheetId = "1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
+    const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
+    const range = "Sheet1";
+    let salaries = {};
 
-// دالة تهيئة وتحريك الخلفية ثلاثية الأبعاد (Three.js)
-function initThreeJS() {
-    const canvas = document.getElementById('threeCanvas');
-    if (!canvas) return; 
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    const ambientLight = new THREE.AmbientLight(0x404040, 2); 
-    scene.add(ambientLight);
-
-    // إنشاء شبكة من الكرات النيونية
-    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-    // تقليل شدة الانبعاث الضوئي
-    const material = new THREE.MeshPhongMaterial({ color: 0x00b7ff, emissive: 0x00b7ff, emissiveIntensity: 0.1 }); 
-    const particles = [];
-    const particleCount = 250; 
-
-    for (let i = 0; i < particleCount; i++) {
-        const particle = new THREE.Mesh(geometry, material);
-        particle.position.set(
-            (Math.random() - 0.5) * 200,
-            (Math.random() - 0.5) * 200,
-            (Math.random() - 0.5) * 200
-        );
-        particle.scale.set(0.1 + Math.random() * 0.2, 0.1 + Math.random() * 0.2, 0.1 + Math.random() * 0.2);
-        scene.add(particle);
-        particles.push(particle);
+    async function fetchData() {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const rows = data.values;
+      const headers = rows[0];
+      rows.slice(1).forEach(row => {
+        let record = {};
+        headers.forEach((header, i) => (record[header] = row[i]));
+        salaries[record["Rider ID"]] = record;
+      });
     }
 
-    camera.position.z = 50;
+    function showSalary() {
+      const id = document.getElementById("riderId").value.trim();
+      const resultDiv = document.getElementById("result");
+      const netBox = document.getElementById("netBox");
+      const netValue = document.getElementById("netValue");
 
-    function animate() {
-        requestAnimationFrame(animate);
-
-        particles.forEach(p => {
-            p.rotation.x += 0.005; 
-            p.rotation.y += 0.002; 
-            p.position.z += 0.02;  
-            if (p.position.z > 100) {
-                p.position.z = -100;
-            }
-        });
-
-        camera.rotation.y += 0.0002; 
-
-        renderer.render(scene, camera);
-    }
-
-    animate();
-
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-}
-
-// دالة التحكم في إضاءة العنوان بالتناوب التسلسلي (تم إبطاؤها)
-function startTitleGlow() {
-    const words = [
-        { element: document.getElementById('glow-word-mta'), className: 'neon-glow-mta' },
-        { element: document.getElementById('glow-word-1'), className: 'neon-glow-word-1' },
-        { element: document.getElementById('glow-word-2'), className: 'neon-glow-word-2' }
-    ];
-    let currentIndex = 0;
-
-    function toggleGlow() {
-        // إطفاء الكل
-        words.forEach(w => w.element.classList.remove(w.className));
-
-        // إضاءة الكلمة الحالية
-        words[currentIndex].element.classList.add(words[currentIndex].className);
-
-        // الانتقال للكلمة التالية (أو العودة للأولى)
-        currentIndex = (currentIndex + 1) % words.length;
-    }
-
-    // تم إبطاء التناوب (كل 1000 مللي ثانية) لإعطاء حركة بطيئة
-    setInterval(toggleGlow, 1000); 
-    
-    toggleGlow();
-}
-
-
-async function fetchData(){
-  try {
-    const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
-    const response=await fetch(url);
-    const data=await response.json();
-    const rows=data.values;
-    
-    if (!rows || rows.length === 0) {
-        console.error("No data found in the spreadsheet.");
-        document.getElementById("result").innerHTML = '<div style="text-align:center;background:rgba(255,0,0,0.3);padding:15px;border-radius:20px;font-size:1rem; color: var(--color-error); box-shadow: 0 0 15px var(--color-error);">?? لم يتم العثور على بيانات. تأكد من أن Google Sheet ليس فارغًا.</div>';
-        return; 
-    }
-
-    const headers=rows[0];
-    rows.slice(1).forEach(row=>{
-      let record={};
-      headers.forEach((header,i)=>record[header]=row[i]);
-      if (record["Rider ID"] && record["Rider ID"].trim()) {
-        salaries[record["Rider ID"].trim()] = record;
+      if (!salaries[id]) {
+        resultDiv.innerHTML = "<div>❌ لا يوجد بيانات لهذا Rider ID</div>";
+        resultDiv.style.display = "block";
+        netBox.style.display = "none";
+        return;
       }
-    });
-    
-    const resultDiv = document.getElementById("result");
-    if (resultDiv.innerHTML.includes('جاري تحميل البيانات')) {
-        resultDiv.innerHTML = '';
+
+      const loaderScreen = document.getElementById("loaderScreen");
+      const loader = document.getElementById("loader");
+      const successCheck = document.getElementById("successCheck");
+
+      loaderScreen.style.display = "flex";
+      loader.style.display = "block";
+      successCheck.style.display = "none";
+
+      setTimeout(() => {
+        loader.style.display = "none";
+        successCheck.style.display = "block";
+
+        setTimeout(() => {
+          loaderScreen.style.display = "none";
+
+          let detailsHtml = '<table>';
+          Object.entries(salaries[id]).forEach(([key, value]) => {
+            if (key !== "Net Salary" && key !== "صافي القبض" && key !== "Rider ID") {
+              detailsHtml += `
+                <tr>
+                  <td>${key}</td>
+                  <td style='text-align:left; font-weight:900;'>${value}</td>
+                </tr>`;
+            }
+          });
+          detailsHtml += '</table>';
+
+          resultDiv.innerHTML = detailsHtml;
+          resultDiv.style.display = "block";
+
+          const net = salaries[id]["Net Salary"] || salaries[id]["صافي القبض"] || salaries[id]["القبض الصافي"] || 0;
+          netValue.innerHTML = `${net} جنيه`;
+          netBox.style.display = "block";
+
+        }, 900);
+      }, 1000);
     }
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    document.getElementById("result").innerHTML = '<div style="text-align:center;background:rgba(255,0,0,0.3);padding:15px;border-radius:20px;font-size:1rem; color: var(--color-error); box-shadow: 0 0 15px var(--color-error);">?? فشل تحميل البيانات. تأكد من مفتاح API و Sheet ID.</div>';
-  }
-}
 
-function checkLogin(){
-  const password=document.getElementById("password").value.trim();
-  const id=document.getElementById("riderId").value.trim();
-  const successMark=document.getElementById("successMark");
-  const resultDiv=document.getElementById("result");
-  
-  if (Object.keys(salaries).length === 0) {
-      resultDiv.innerHTML='<div style="text-align:center;background:rgba(255,255,255,0.1);padding:15px;border-radius:14px;font-size:1rem; color: var(--color-primary);">? جاري تحميل البيانات... انتظر قليلاً.</div>';
-      fetchData(); 
-      return;
-  }
-  
-  // شرط الدخول (MTA)
-  if(password==="MTA" && salaries[id]){
-    currentRider=id;
-    resultDiv.innerHTML = '';
-    
-    successMark.classList.add("show");
-    setTimeout(()=>{
-      successMark.classList.remove("show");
-      showConfirmPage();
-    },800); 
-  } else {
-    resultDiv.innerHTML='<div style="text-align:center;background:rgba(255,0,0,0.3);padding:15px;border-radius:20px;font-size:1rem; color: var(--color-error); box-shadow: 0 0 15px var(--color-error);">? بيانات غير صحيحة</div>';
-  }
-}
-
-function showConfirmPage(){
-  const main=document.getElementById("mainPage");
-  const confirm=document.getElementById("confirmPage");
-  const name=document.getElementById("riderName");
-  const record=salaries[currentRider];
-  name.textContent = record["Rider Name"] || record["الاسم"] || "غير معروف";
-  main.style.display="none";
-  confirm.classList.add("show");
-}
-
-function confirmNo(){
-  document.getElementById("confirmPage").classList.remove("show");
-  document.getElementById("mainPage").style.display="block";
-  document.querySelectorAll('.input-box').forEach(el => el.style.display = 'block');
-  const button = document.querySelector('.container button');
-  if (button) button.style.display = 'block';
-  document.getElementById("result").innerHTML = '';
-  document.getElementById("riderNameDisplay").style.display = 'none'; 
-}
-
-function confirmYes(){
-  document.getElementById("confirmPage").classList.remove("show");
-  showSalary();
-}
-
-function showSalary(){
-  const id=currentRider;
-  const resultDiv=document.getElementById("result");
-  const riderNameDisplay = document.getElementById("riderNameDisplay"); 
-
-  const record = salaries[id];
-  const riderName = record["Rider Name"] || record["الاسم"] || "المندوب";
-
-  // إعداد مربع اسم المندوب
-  riderNameDisplay.innerHTML = `<span>مرحباً، ${riderName}</span>`;
-  riderNameDisplay.style.display = 'block';
-
-  document.querySelectorAll('.input-box').forEach(el => el.style.display = 'none');
-  const button = document.querySelector('.container button');
-  if (button) button.style.display = 'none';
-
-  resultDiv.innerHTML=""; 
-  let html='';
-  
-  let netValue = "غير متاح";
-  let netCurrency = " ";
-  let netNumber = "غير متاح";
-  let boxCounter = 0;
-
-  Object.entries(record).forEach(([key,value])=>{
-    const trimmedKey = key.trim();
-    
-    // فصل القيمة الصافية
-    if(/net|صافي|القبض/i.test(key) && !/اجمالي/i.test(key)){
-        netValue = value;
-        
-        // محاولة استخراج الرقم والعملة
-        const match = netValue.match(/(\d[\d,.]*)/); // ابحث عن أي رقم
-        if (match) {
-            netNumber = match[0];
-            netCurrency = netValue.replace(netNumber, "").trim() || " ";
-        } else {
-             netNumber = netValue;
-             netCurrency = "";
-        }
-        return; 
-    }
-    
-    if(trimmedKey!=="Rider ID" && !/net|صافي|القبض|الاسم|Rider Name/i.test(key) && trimmedKey !== ""){
-      boxCounter++;
-      const colorClass = `color-${((boxCounter - 1) % 5) + 1}`; 
-      
-      let isNegative = key.toLowerCase().includes("عجز") || key.toLowerCase().includes("خصم");
-      let color = isNegative ? "var(--color-error)" : "var(--color-text-light)";
-      const displayValue = (value === "" || value === null || value === undefined || value.trim() === "") ? "0" : value;
-      let currency = (isNaN(parseFloat(displayValue)) || displayValue === "0" || displayValue.match(/[a-zA-Z]/)) ? "" : " ";
-      
-      html+= `<div class="salary-box ${colorClass} ${isNegative ? 'negative' : ''}">
-                <div class="salary-key">${key}</div>
-                <div class="salary-value" style="color:${color};">${displayValue}${currency}</div>
-              </div>`;
-    }
-  });
-
-  // مربع القبض الصافي الهادئ
-html+= `<div class="net-box">
-            <span class="net-label">القبض الصافي </span>
-            <span class="net-value-number">${netNumber}</span>
-            <span class="net-label">${netCurrency}</span>
-          </div>`;
-
-          
-  resultDiv.innerHTML=html;
-  document.getElementById("mainPage").style.display="block";
-}
-
-
-// بدء تحميل البيانات وتهيئة الخلفية ثلاثية الأبعاد
-window.onload = function() {
-    initThreeJS();
     fetchData();
-    // التأكد من تشغيل تأثير إضاءة العنوان النيونية
-    startTitleGlow(); 
-}
+  </script>
 
-</script>
 </body>
 </html>
