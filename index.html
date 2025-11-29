@@ -3,224 +3,338 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>اعرف قبضك</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet" />
+  <title>اعرف قبضك — تصميم احترافي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-    body {
-      margin: 0; padding: 0; min-height: 100vh;
-      background: radial-gradient(circle at top, #000000, #111827, #000);
-      color: #fff; display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-start;
-      overflow-x: hidden; position: relative;
+    :root{
+      --primary: #2563eb;
+      --secondary: #38bdf8;
+      --accent: #0ea5e9;
+      --glass-bg: rgba(255,255,255,0.07);
+      --glass-border: rgba(56,189,248,0.18);
+      --shadow: 0 8px 32px rgba(37,99,235,0.08);
+      --radius: 22px;
+      --text-main: #0f172a;
+      --text-light: #fff;
+      --muted: #64748b;
+    }
+    *{box-sizing:border-box;font-family:'Cairo',sans-serif}
+    html,body{height:100%;margin:0;padding:0;scroll-behavior:smooth;direction:rtl;}
+    body{
+      min-height:100vh;
+      background: linear-gradient(120deg,#0a0a23 0%, #1a2332 100%);
+      color:var(--text-light);
+      display:flex;align-items:center;justify-content:center;
+      overflow-x:hidden;overflow-y:auto;
+    }
+    .bg-anim{
+      position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(56,189,248,0.13) 0%, transparent 20%),
+        radial-gradient(ellipse at 85% 80%, rgba(37,99,235,0.11) 0%, transparent 18%),
+        radial-gradient(ellipse at 40% 70%, rgba(14,165,233,0.09) 0%, transparent 15%);
+      animation: float 12s ease-in-out infinite;
+      filter: blur(18px) saturate(120%);
+    }
+    @keyframes float{0%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(1deg)}100%{transform:translateY(0) rotate(0deg)}}
+
+    .page-wrap{position:relative;z-index:2;width:100%;max-width:520px;margin:40px auto;padding:0 12px;}
+    .header{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:2px;
+      margin-bottom:18px;
+    }
+    .logo-mta{
+      font-size:4.4rem;
+      font-weight:900;
+      color:var(--primary);
+      letter-spacing:2px;
+      text-shadow:0 2px 18px rgba(37,99,235,0.09);
+      margin-bottom:0;
+      transform: translateY(25px);
+      opacity:0;
+      animation: fadeSlideDown 1s ease forwards;
+    }
+    @keyframes fadeSlideDown{
+      0% { opacity:0; transform:translateY(-25px); }
+      100% { opacity:1; transform:translateY(25px); }
     }
 
-    /* شعار MTA */
-    .logo-mta {
-      margin-top: 30px;
-      font-size: 3.4rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      text-align: center;
-      background: linear-gradient(90deg, #00eaff, #00b7ff, #38bdf8, #ffffff);
+    .title{
+      font-size:4.4rem;font-weight:700;text-align:center;
+      display:flex;gap:12px;
+    }
+    .word-gradient {
+      background: linear-gradient(90deg, #2563eb, #38bdf8, #0ea5e9, #2563eb);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 25px #00cfffaa, 0 0 45px #00cfff55;
-      animation: glow 3s ease-in-out infinite alternate;
+      display: inline-block;
+      animation: gradientShift 3s ease infinite;
+      background-size: 300% 300%;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    @keyframes glow {
-      0% { text-shadow: 0 0 15px #00cfff55, 0 0 30px #00cfff33; }
-      100% { text-shadow: 0 0 35px #00eaffcc, 0 0 65px #00eaff88; }
+    /* --- باقي الصفحة --- */
+    .card{
+      background:rgba(30,41,59,0.85);
+      border-radius:var(--radius);
+      border:1.5px solid var(--glass-border);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px) saturate(120%);
+      padding:32px 22px 24px 22px;
+      position:relative;
+      margin-bottom:18px;
+    }
+    .controls{display:flex;flex-direction:column;gap:14px;align-items:stretch;margin-bottom:18px;}
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      border-radius: 14px;
+      border: 2px solid #2563eb;
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+      padding: 0;
+      overflow: hidden;
+    }
+    .input-wrap::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, #2563eb, #38bdf8, #0ea5e9, #2563eb);
+      background-size: 400% 400%;
+      filter: blur(12px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .input-wrap:focus-within::before {
+      opacity: 1;
+      animation: gradientMove 3s linear infinite;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    h1 {
-      margin-top: 10px; /* تم تقليل المسافة لتناسب اللوجو */
-      font-size: 3rem; font-weight: bold;
-      background: linear-gradient(90deg, #00b7ff, #38bdf8, #fff);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px #00b7ff80;
+    input[type="text"] {
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      flex: 1;
+      text-align: center;
+      color: #f1f5f9;
+      background: transparent;
+      z-index: 1;
+      outline: none;
     }
 
-    .container {
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(15px);
-      border-radius: 25px; border: 2px solid #38bdf880;
-      box-shadow: 0 0 30px #00b7ff33;
-      padding: 40px 25px; width: 90%; max-width: 600px;
-      margin-top: 30px; position: relative;
-    }
-    label { font-size: 1.4rem; font-weight: 700; display: block; margin-bottom: 14px; text-align: center; }
-    input {
-      width: 100%; padding: 18px; border-radius: 16px;
-      border: 2px solid #00b7ff; font-size: 1.4rem;
-      text-align: center; color: #111; background: #f8fafc;
-      margin-bottom: 16px;
-    }
-    button {
-      width: 100%; background: linear-gradient(90deg, #00b7ff, #38bdf8);
-      color: white; border: none; padding: 16px; font-size: 1.3rem;
-      font-weight: bold; border-radius: 14px; cursor: pointer;
+    .input-wrap label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      font-size: 1.1rem;
+      text-align: center;
+      transition: 0.2s;
     }
 
-    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 1.3rem; }
-    tr { cursor: pointer; }
-    td { padding: 12px 10px; border-radius: 10px; background: rgba(255,255,255,0.08); }
-
-    .net-box { margin-top: 35px; text-align: center; }
-    .net-value {
-      background: linear-gradient(90deg, #0077ff, #00b7ff);
-      color: #fff; font-size: 2.7rem; font-weight: 900;
-      border-radius: 20px; padding: 25px 0;
-      box-shadow: 0 0 25px #00b7ffaa;
-    }
-    .net-label { margin-top: 12px; color: #b7e3ff; font-size: 1.3rem; font-weight: 700; }
-
-    .loader-screen {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 999; display: none;
-    }
-
-    .glass-loader {
-      width: 140px; height: 140px;
-      border-radius: 50%; position: relative;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(20px);
-      border: 4px solid rgba(255,255,255,0.15);
-      box-shadow: inset 0 0 25px rgba(255,255,255,0.15),
-                  0 0 25px #00b7ffaa,
-                  0 0 50px #0088ff55;
-      animation: rotate 1.6s linear infinite;
-    }
-    .glass-loader::before {
-      content: "";
-      position: absolute; inset: 0;
-      border-radius: 50%;
-      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.25) 60%);
-      filter: blur(4px);
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .success-check {
-      font-size: 8rem;
-      color: #00ffbf;
-      text-shadow: 0 0 25px #00ffbfaa, 0 0 60px #00ffbf88;
+    .input-wrap input:focus + label,
+    .input-wrap input:not(:placeholder-shown) + label {
       display: none;
-      animation: checkPop 0.4s ease-out;
     }
-    @keyframes checkPop {
-      0% { transform: scale(0); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+
+    .btn{background:linear-gradient(90deg,var(--primary),var(--secondary));padding:13px 0;font-size:1.15rem;font-weight:900;border:none;border-radius:14px;color:var(--text-light);cursor:pointer;box-shadow:0 4px 16px rgba(56,189,248,0.10);transition:background 0.2s,box-shadow 0.2s;}
+    .btn:active{background:linear-gradient(90deg,var(--secondary),var(--primary));}
+    .meta{margin-top:6px;color:var(--muted);font-weight:700;text-align:center;font-size:0.98rem;}
+    .result-area{margin-top:10px;}
+    .details{background:rgba(17,24,39,0.65);padding:16px;border-radius:14px;border:1px solid #334155;margin-bottom:12px;box-shadow:0 2px 8px rgba(56,189,248,0.04);}
+    .details table{width:100%;border-collapse:collapse;font-size:1rem;}
+    .details td{padding:14px 10px;border-bottom:1px solid #e0e7ef;color:#fff;font-weight:900;}
+    .details td:first-child{width:45%;color:#fff;font-weight:800;}
+    .details td:last-child{text-align:left;color:#fff;font-weight:900;}
+    .net-card{background:linear-gradient(135deg,#2563eb,#0ea5e9);padding:18px 0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;box-shadow:0 2px 12px rgba(37,99,235,0.09);margin-bottom:8px;}
+    .net-value{font-size:2.3rem;font-weight:900;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,0.13)}
+    .net-label{font-weight:700;color:#dbeafe;font-size:1.05rem;}
+    .loader-screen{position:absolute;inset:0;background:linear-gradient(180deg,rgba(37,99,235,0.08),rgba(56,189,248,0.09));display:flex;align-items:center;justify-content:center;border-radius:var(--radius);z-index:5;display:none}
+    .glass-loader{width:80px;height:80px;border-radius:50%;border:6px solid rgba(56,189,248,0.13);display:flex;align-items:center;justify-content:center;position:relative}
+    .glass-loader .spinner{width:54px;height:54px;border-radius:50%;border:6px solid transparent;border-top-color:var(--primary);animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* --- تعديل نجاح --- */
+    .success-check{
+      font-size:8rem; 
+      color:#22c55e;
+      display:none;
+      text-shadow:
+        0 0 20px #22c55e,
+        0 0 40px #22c55e,
+        0 0 60px #16a34a,
+        0 0 80px #16a34a;
+      animation: pulse 1.2s infinite, spark 1.5s infinite;
     }
+    @keyframes pulse{
+      0% { transform: scale(0.8); opacity:0.7; }
+      50% { transform: scale(1.1); opacity:1; }
+      100% { transform: scale(0.8); opacity:0.7; }
+    }
+    @keyframes spark{
+      0%,100%{text-shadow: 0 0 20px #22c55e, 0 0 40px #22c55e, 0 0 60px #16a34a, 0 0 80px #16a34a;}
+      50%{text-shadow: 0 0 30px #22c55e, 0 0 60px #22c55e, 0 0 90px #16a34a, 0 0 120px #16a34a;}
+    }
+
+    .hint{font-size:0.95rem;color:#94a3b8;text-align:center;margin-top:8px}
+    .note{margin-top:18px;font-size:0.9rem;color:#94a3b8;text-align:center}
+    @media (max-width:600px){.card{padding:18px 6px;}.page-wrap{padding:0 2px;}}
   </style>
 </head>
-
 <body>
-
-  <!-- شعار MTA -->
-  <div class="logo-mta">MTA</div>
-
-  <h1>اعرف قبضك</h1>
-
-  <div class="loader-screen" id="loaderScreen">
-    <div class="glass-loader" id="loader"></div>
-    <div class="success-check" id="successCheck">✔</div>
-  </div>
-
-  <div class="container">
-    <label for="riderId">ادخل Rider ID</label>
-    <input type="text" id="riderId" placeholder="اكتب رقم الطيار هنا" />
-    <button onclick="showSalary()">عرض التفاصيل</button>
-
-    <div style="text-align:center; margin-top:10px; font-size:1rem; color:#b7e3ff;">Best regards, Rami Nassim</div>
-
-    <div id="result"></div>
-
-    <div class="net-box" id="netBox" style="display:none;">
-      <div class="net-value" id="netValue">0 </div>
-      <div class="net-label">صافي القبض الفعلي للطيار</div>
+  <div class="bg-anim" aria-hidden="true"></div>
+  <div class="page-wrap">
+    <div class="header">
+      <div class="logo-mta">MTA</div>
+      <div class="title">
+        <span class="word-gradient">اعرف</span>
+        <span class="word-gradient">قبضك</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="controls">
+        <div class="input-wrap">
+          <input type="text" id="riderId" placeholder=" " autocomplete="off" />
+          <label for="riderId">ادخل Rider ID</label>
+        </div>
+        <button class="btn" id="showBtn">عرض التفاصيل</button>
+        <div class="meta">ادخل رقم الطيار ثم اضغط "عرض التفاصيل"</div>
+      </div>
+      <div class="result-area">
+        <div class="details" id="result"></div>
+        <div class="net-card" id="netBox" style="display:none">
+          <div style="font-size:0.95rem;color:#e0e7ef;font-weight:800">صافي القبض الفعلي</div>
+          <div class="net-value" id="netValue">0 جنيه</div>
+          <div class="net-label">قيمة القبض بعد الخصومات</div>
+        </div>
+      </div>
+      <div class="loader-screen" id="loaderScreen">
+        <div class="glass-loader">
+          <div class="spinner"></div>
+        </div>
+        <div class="success-check" id="successCheck">✔</div>
+      </div>
+      <div class="note">Best regards, Rami Nassim</div>
+      <div class="hint"></div>
     </div>
   </div>
 
   <script>
     const sheetId = "1W1cwqjeAFG2zcdRUQJIgAP_0EKtF9bsBaJ5ROPgR-WU";
-    const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94";
+    const apiKey = "AIzaSyCsfH6MKhHCUTyVv8XmtBISqbw5FAwjo94"; 
     const range = "Sheet1";
     let salaries = {};
-
-    async function fetchData() {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      const rows = data.values;
-      const headers = rows[0];
-      rows.slice(1).forEach(row => {
-        let record = {};
-        headers.forEach((header, i) => (record[header] = row[i]));
-        salaries[record["Rider ID"]] = record;
-      });
+    
+    async function fetchData(){
+      try{
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('فشل تحميل البيانات: '+res.status);
+        const data = await res.json();
+        if(!data.values || data.values.length===0) return;
+        const rows = data.values;
+        const headers = rows[0];
+        rows.slice(1).forEach(row=>{
+          const record = {};
+          headers.forEach((h,i)=> record[h] = row[i] ?? "");
+          if(record['Rider ID']) salaries[record['Rider ID'].toString().trim()] = record;
+        });
+      }catch(err){
+        console.warn('fetchData error',err);
+        document.getElementById('result').innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:16px;">تعذر جلب البيانات من Google Sheets.<br>قد يكون هناك مشكلة في المفتاح أو سياسة CORS.</div>`;
+      }
     }
 
-    function showSalary() {
-      const id = document.getElementById("riderId").value.trim();
-      const resultDiv = document.getElementById("result");
-      const netBox = document.getElementById("netBox");
-      const netValue = document.getElementById("netValue");
+    function showLoader(){
+      const s = document.getElementById('loaderScreen');
+      const sc = document.getElementById('successCheck');
+      s.style.display = 'flex';
+      sc.style.display = 'none';
+      s.querySelector('.glass-loader').style.display = 'flex';
+    }
 
-      if (!salaries[id]) {
-        resultDiv.innerHTML = "<div>❌ لا يوجد بيانات لهذا Rider ID</div>";
-        resultDiv.style.display = "block";
-        netBox.style.display = "none";
+    function hideLoaderWithSuccess(callback){
+      const s = document.getElementById('loaderScreen');
+      const sc = document.getElementById('successCheck');
+      const loader = s.querySelector('.glass-loader');
+      setTimeout(()=>{
+        loader.style.display = 'none';
+        sc.style.display = 'block';
+        setTimeout(()=>{
+          s.style.display = 'none';
+          sc.style.display = 'none';
+          loader.style.display = 'flex';
+          if(callback) callback();
+        },1200);
+      },800);
+    }
+
+    function showSalary(){
+      const id = document.getElementById('riderId').value.trim();
+      const resDiv = document.getElementById('result');
+      const netBox = document.getElementById('netBox');
+
+      if(!id){
+        resDiv.innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:12px;">من فضلك اكتب Rider ID</div>`;
+        netBox.style.display = 'none';
+        return;
+      }
+      if(!salaries || Object.keys(salaries).length===0){
+        resDiv.innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:12px;">البيانات غير محمّلة بعد أو أن هناك مشكلة في الاتصال.</div>`;
+        netBox.style.display = 'none';
         return;
       }
 
-      const loaderScreen = document.getElementById("loaderScreen");
-      const loader = document.getElementById("loader");
-      const successCheck = document.getElementById("successCheck");
+      document.querySelector('.controls').style.display = 'none';
 
-      loaderScreen.style.display = "flex";
-      loader.style.display = "block";
-      successCheck.style.display = "none";
+      const rec = salaries[id] || salaries[id.toUpperCase()] || salaries[id.toLowerCase()];
+      if(!rec){
+        resDiv.innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:12px;">❌ لا يوجد بيانات لهذا Rider ID</div>`;
+        netBox.style.display = 'none';
+        return;
+      }
 
-      setTimeout(() => {
-        loader.style.display = "none";
-        successCheck.style.display = "block";
-
-        setTimeout(() => {
-          loaderScreen.style.display = "none";
-
-          let detailsHtml = '<table>';
-          Object.entries(salaries[id]).forEach(([key, value]) => {
-            if (key !== "Net Salary" && key !== "صافي القبض" && key !== "Rider ID") {
-              detailsHtml += `
-                <tr>
-                  <td>${key}</td>
-                  <td style='text-align:left; font-weight:900;'>${value}</td>
-                </tr>`;
-            }
-          });
-          detailsHtml += '</table>';
-
-          resultDiv.innerHTML = detailsHtml;
-          resultDiv.style.display = "block";
-
-          const net = salaries[id]["Net Salary"] || salaries[id]["صافي القبض"] || salaries[id]["القبض الصافي"] || 0;
-          netValue.innerHTML = `${net} جنيه`;
-          netBox.style.display = "block";
-
-        }, 900);
-      }, 1000);
+      showLoader();
+      hideLoaderWithSuccess(()=>{
+        const skip = new Set(['Rider ID','Net Salary','صافي القبض','القبض الصافي']);
+        let html = '<table>';
+        Object.entries(rec).forEach(([k,v])=>{
+          if(skip.has(k)) return;
+          html += `<tr><td>${k}</td><td>${v ?? ''}</td></tr>`;
+        });
+        html += '</table>';
+        resDiv.innerHTML = html;
+        const net = rec['Net Salary'] || rec['صافي القبض'] || rec['القبض الصافي'] || '0';
+        document.getElementById('netValue').innerText = `${net} جنيه`;
+        netBox.style.display = 'flex';
+      });
     }
 
+    document.getElementById('showBtn').addEventListener('click', showSalary);
     fetchData();
   </script>
-
 </body>
 </html>
