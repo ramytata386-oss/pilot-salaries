@@ -43,23 +43,18 @@
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap:2px;
+      gap:12px;
       margin-bottom:18px;
     }
-    .logo-mta{
-      font-size:4.4rem;
-      font-weight:900;
-      color:var(--primary);
-      letter-spacing:2px;
-      text-shadow:0 2px 18px rgba(37,99,235,0.09);
-      margin-bottom:0;
-      transform: translateY(25px);
-      opacity:0;
-      animation: fadeSlideDown 1s ease forwards;
-    }
-    @keyframes fadeSlideDown{
-      0% { opacity:0; transform:translateY(-25px); }
-      100% { opacity:1; transform:translateY(25px); }
+
+    /* شعار MTA في الهيدر يظهر دائمًا */
+    #mtaLogoHeader{
+      display:block;
+      width:430px;
+      max-width:100%;
+      height:auto;
+      margin-bottom:12px;
+      border-radius:14px;
     }
 
     .title{
@@ -80,7 +75,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* --- باقي الصفحة --- */
     .card{
       background:rgba(30,41,59,0.85);
       border-radius:var(--radius);
@@ -92,7 +86,6 @@
       margin-bottom:18px;
     }
     .controls{display:flex;flex-direction:column;gap:14px;align-items:stretch;margin-bottom:18px;}
-
     .input-wrap {
       position: relative;
       display: flex;
@@ -128,7 +121,6 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     input[type="text"] {
       border: none;
       padding: 14px;
@@ -141,7 +133,6 @@
       z-index: 1;
       outline: none;
     }
-
     .input-wrap label {
       position: absolute;
       top: 50%;
@@ -154,12 +145,10 @@
       text-align: center;
       transition: 0.2s;
     }
-
     .input-wrap input:focus + label,
     .input-wrap input:not(:placeholder-shown) + label {
       display: none;
     }
-
     .btn{background:linear-gradient(90deg,var(--primary),var(--secondary));padding:13px 0;font-size:1.15rem;font-weight:900;border:none;border-radius:14px;color:var(--text-light);cursor:pointer;box-shadow:0 4px 16px rgba(56,189,248,0.10);transition:background 0.2s,box-shadow 0.2s;}
     .btn:active{background:linear-gradient(90deg,var(--secondary),var(--primary));}
     .meta{margin-top:6px;color:var(--muted);font-weight:700;text-align:center;font-size:0.98rem;}
@@ -176,29 +165,7 @@
     .glass-loader{width:80px;height:80px;border-radius:50%;border:6px solid rgba(56,189,248,0.13);display:flex;align-items:center;justify-content:center;position:relative}
     .glass-loader .spinner{width:54px;height:54px;border-radius:50%;border:6px solid transparent;border-top-color:var(--primary);animation:spin 1s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* --- تعديل نجاح --- */
-    .success-check{
-      font-size:8rem; 
-      color:#22c55e;
-      display:none;
-      text-shadow:
-        0 0 20px #22c55e,
-        0 0 40px #22c55e,
-        0 0 60px #16a34a,
-        0 0 80px #16a34a;
-      animation: pulse 1.2s infinite, spark 1.5s infinite;
-    }
-    @keyframes pulse{
-      0% { transform: scale(0.8); opacity:0.7; }
-      50% { transform: scale(1.1); opacity:1; }
-      100% { transform: scale(0.8); opacity:0.7; }
-    }
-    @keyframes spark{
-      0%,100%{text-shadow: 0 0 20px #22c55e, 0 0 40px #22c55e, 0 0 60px #16a34a, 0 0 80px #16a34a;}
-      50%{text-shadow: 0 0 30px #22c55e, 0 0 60px #22c55e, 0 0 90px #16a34a, 0 0 120px #16a34a;}
-    }
-
+    .success-check{font-size:6rem;color:#22c55e;display:none}
     .hint{font-size:0.95rem;color:#94a3b8;text-align:center;margin-top:8px}
     .note{margin-top:18px;font-size:0.9rem;color:#94a3b8;text-align:center}
     @media (max-width:600px){.card{padding:18px 6px;}.page-wrap{padding:0 2px;}}
@@ -208,7 +175,8 @@
   <div class="bg-anim" aria-hidden="true"></div>
   <div class="page-wrap">
     <div class="header">
-      <div class="logo-mta">MTA</div>
+      <!-- شعار MTA في الهيدر يظهر دائمًا -->
+      <img id="mtaLogoHeader" src="https://i.ibb.co/qhQkLT4/98e663cc-799b-460e-b1c7-8433ef14cef4.jpg" alt="MTA Logo">
       <div class="title">
         <span class="word-gradient">اعرف</span>
         <span class="word-gradient">قبضك</span>
@@ -224,6 +192,12 @@
         <div class="meta">ادخل رقم الطيار ثم اضغط "عرض التفاصيل"</div>
       </div>
       <div class="result-area">
+        <!-- شعار MTA يظهر فوق بيانات الطيار بنفس عرض البطاقة -->
+        <div id="mtaLogoResult" style="display:none;text-align:center;margin-bottom:2px;">
+          <img src="https://i.ibb.co/qhQkLT4/98e663cc-799b-460e-b1c7-8433ef14cef4.jpg" 
+               alt="MTA Logo" 
+               style="width:100%;max-width:450px;height:auto;border-radius:30px;">
+        </div>
         <div class="details" id="result"></div>
         <div class="net-card" id="netBox" style="display:none">
           <div style="font-size:0.95rem;color:#e0e7ef;font-weight:800">صافي القبض الفعلي</div>
@@ -288,7 +262,7 @@
           sc.style.display = 'none';
           loader.style.display = 'flex';
           if(callback) callback();
-        },1200);
+        },1000);
       },800);
     }
 
@@ -300,11 +274,13 @@
       if(!id){
         resDiv.innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:12px;">من فضلك اكتب Rider ID</div>`;
         netBox.style.display = 'none';
+        document.getElementById('mtaLogoResult').style.display = 'none';
         return;
       }
       if(!salaries || Object.keys(salaries).length===0){
         resDiv.innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:12px;">البيانات غير محمّلة بعد أو أن هناك مشكلة في الاتصال.</div>`;
         netBox.style.display = 'none';
+        document.getElementById('mtaLogoResult').style.display = 'none';
         return;
       }
 
@@ -314,6 +290,7 @@
       if(!rec){
         resDiv.innerHTML = `<div style="text-align:center;color:#ef4444;font-weight:800;padding:12px;">❌ لا يوجد بيانات لهذا Rider ID</div>`;
         netBox.style.display = 'none';
+        document.getElementById('mtaLogoResult').style.display = 'none';
         return;
       }
 
@@ -327,6 +304,10 @@
         });
         html += '</table>';
         resDiv.innerHTML = html;
+
+        // إظهار شعار MTA فوق بيانات الطيار
+        document.getElementById('mtaLogoResult').style.display = 'block';
+
         const net = rec['Net Salary'] || rec['صافي القبض'] || rec['القبض الصافي'] || '0';
         document.getElementById('netValue').innerText = `${net} جنيه`;
         netBox.style.display = 'flex';
