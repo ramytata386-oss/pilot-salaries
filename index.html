@@ -416,7 +416,8 @@ document.getElementById("showBtn").addEventListener("click", ()=>{
     netNote.style.display="block";
     setTimeout(()=>netNote.classList.add("show"),50);
 
-    const netSalary = rec["القبض الصافي"] ?? "0";
+    const netSalary =
+    rec[Object.keys(rec).find(k => k.trim() === "القبض الصافي")] || "0";
     document.getElementById("netSalaryText").textContent = `صافي القبض  ${netSalary}`;
 
     setTimeout(()=>netSalaryBox.style.opacity="1",50);
@@ -427,3 +428,4 @@ document.getElementById("showBtn").addEventListener("click", ()=>{
 
 </body>
 </html>
+
